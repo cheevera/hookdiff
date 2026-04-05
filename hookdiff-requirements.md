@@ -31,7 +31,7 @@ At-a-glance status of every implementation unit. This list is the single source 
   - [x] Add a single smoke test that renders <App /> without crashing
 - [x] Step 1.2 — Static shell with hardcoded endpoint URL
 - [x] Step 1.3 — Endpoint creation flow with MSW
-- [ ] Step 1.4 — Request list from MSW
+- [x] Step 1.4 — Request list from MSW
 - [ ] Step 1.5 — Real-time updates with a mock WebSocket
 - [ ] Step 1.6 — Request deletion
 - [ ] Step 1.7 — Detail panel polish
