@@ -26,7 +26,7 @@ Webhook debugging tools usually stop at "show me the request". When you're integ
 | Backend | Django + Django REST Framework, Daphne (ASGI), Django Channels, PostgreSQL 16, Redis 7 |
 | Frontend | React 19 + TypeScript, Vite, Tailwind v4, React Router v7, TanStack React Query, Shiki, Sonner |
 | Testing | pytest + pytest-cov (backend), Vitest + Testing Library + MSW (frontend) |
-| Tooling | uv (Python), pnpm (Node), Ruff, ESLint, Prettier |
+| Tooling | uv (Python), pnpm (Node), Ruff, Biome |
 | Infra | Docker Compose, VS Code devcontainer |
 
 ## Status

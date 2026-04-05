@@ -24,8 +24,7 @@ At-a-glance status of every implementation unit. This list is the single source 
   - [ ] Install and configure Tailwind
   - [ ] Install and configure Vitest
   - [ ] Install and configure @testing-library/react
-  - [ ] Install and configure ESLint
-  - [ ] Install and configure Prettier
+  - [ ] Install and configure Biome (lint + format)
   - [ ] Install and configure MSW
   - [ ] Install and configure React Router
   - [ ] Install and configure React Query
@@ -103,7 +102,7 @@ At-a-glance status of every implementation unit. This list is the single source 
 | Toast notifications | Sonner | Lightweight, Tailwind-compatible |
 | Package manager | pnpm | Faster, stricter, better monorepo support |
 | Testing | Vitest + @testing-library/react | Behavior-focused component testing |
-| Linting | Prettier + ESLint | |
+| Lint + format | Biome | Single tool replacing Prettier + ESLint. Covers React hook rules. |
 
 ---
 
@@ -165,8 +164,7 @@ Managed via `.env` file. A committed `.env.example` documents all required varia
 ### Pre-commit Hooks
 
 - Ruff (lint + format) on all Python files
-- Prettier on all TypeScript/TSX/CSS files
-- ESLint on all TypeScript/TSX files
+- Biome (lint + format) on all TypeScript/TSX/JSON/CSS files
 
 ---
 
