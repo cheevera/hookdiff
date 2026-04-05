@@ -27,7 +27,7 @@ At-a-glance status of every implementation unit. This list is the single source 
   - [x] Install and configure Biome (lint + format)
   - [x] Install and configure MSW
   - [x] Install and configure React Router
-  - [ ] Install and configure React Query
+  - [x] Install and configure React Query
   - [x] Add a single smoke test that renders <App /> without crashing
 - [ ] Step 1.2 — Static shell with hardcoded endpoint URL
 - [ ] Step 1.3 — Endpoint creation flow with MSW
