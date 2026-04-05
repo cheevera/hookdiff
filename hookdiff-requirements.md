@@ -10,6 +10,8 @@
 
 At-a-glance status of every implementation unit. This list is the single source of truth for tracking progress. The per-step sections below remain the detailed spec.
 
+**Update policy**: steps with sub-checkboxes update incrementally as each sub-unit is committed. The top-level step checkbox is only marked when all sub-items are complete.
+
 ### Development Environment
 
 - [x] Frontend Dockerfile
@@ -32,7 +34,12 @@ At-a-glance status of every implementation unit. This list is the single source 
 - [x] Step 1.2 — Static shell with hardcoded endpoint URL
 - [x] Step 1.3 — Endpoint creation flow with MSW
 - [x] Step 1.4 — Request list from MSW
-- [ ] Step 1.5 — Real-time updates with a mock WebSocket
+- Step 1.5 — Real-time updates with a mock WebSocket
+  - [x] Unit A — Env helper and test WebSocket stub
+  - [ ] Unit B — Mock WebSocket class
+  - [ ] Unit C — WebSocket factory and useWebSocket hook
+  - [ ] Unit D — Pinning, newCount badge, and jump to latest
+  - [ ] Unit E — Dev-only connection status indicator
 - [ ] Step 1.6 — Request deletion
 - [ ] Step 1.7 — Detail panel polish
 
