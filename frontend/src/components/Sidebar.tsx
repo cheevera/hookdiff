@@ -1,18 +1,35 @@
 import type { WebhookRequest } from '../types/request'
 import { MethodBadge } from './MethodBadge'
 
+const PREVIEW_MAX_LEN = 80
+
 function bodyPreview(body: unknown): string {
   if (body === null || body === undefined) return '(no body)'
+  let text: string
   try {
-    return JSON.stringify(body)
+    text = JSON.stringify(body)
   } catch {
-    return String(body)
+    text = String(body)
   }
+  if (text.length > PREVIEW_MAX_LEN) {
+    return `${text.slice(0, PREVIEW_MAX_LEN)}…`
+  }
+  return text
 }
 
 function formatTime(iso: string): string {
   const d = new Date(iso)
   return d.toLocaleTimeString()
+}
+
+function latestReceivedAt(requests: WebhookRequest[]): string {
+  let latest = requests[0].receivedAt
+  for (const r of requests) {
+    if (new Date(r.receivedAt).getTime() > new Date(latest).getTime()) {
+      latest = r.receivedAt
+    }
+  }
+  return latest
 }
 
 type SidebarItemProps = {
@@ -48,13 +65,49 @@ function SidebarItem({ request, selected, onSelect }: SidebarItemProps) {
 
 type SidebarProps = {
   requests: WebhookRequest[]
+  isLoading: boolean
+  isError: boolean
   selectedId: string | null
   onSelect: (id: string) => void
 }
 
-export function Sidebar({ requests, selectedId, onSelect }: SidebarProps) {
+const shellClass =
+  'w-80 shrink-0 overflow-y-auto border-r border-gray-200 bg-gray-50 dark:border-gray-800 dark:bg-gray-900'
+
+export function Sidebar({ requests, isLoading, isError, selectedId, onSelect }: SidebarProps) {
+  if (isLoading) {
+    return (
+      <aside className={shellClass}>
+        <div className="p-6 text-center text-sm text-gray-500 dark:text-gray-400">
+          Loading requests…
+        </div>
+      </aside>
+    )
+  }
+  if (isError) {
+    return (
+      <aside className={shellClass}>
+        <div className="p-6 text-center text-sm text-gray-500 dark:text-gray-400">
+          Failed to load requests
+        </div>
+      </aside>
+    )
+  }
+  if (requests.length === 0) {
+    return (
+      <aside className={shellClass}>
+        <div className="p-6 text-center text-sm text-gray-500 dark:text-gray-400">
+          No requests yet
+        </div>
+      </aside>
+    )
+  }
   return (
-    <aside className="w-80 shrink-0 overflow-y-auto border-r border-gray-200 bg-gray-50 dark:border-gray-800 dark:bg-gray-900">
+    <aside className={shellClass}>
+      <div className="border-b border-gray-200 px-4 py-3 text-xs text-gray-600 dark:border-gray-800 dark:text-gray-400">
+        <div>{requests.length} requests</div>
+        <div>Last: {formatTime(latestReceivedAt(requests))}</div>
+      </div>
       <ul>
         {requests.map((request) => (
           <SidebarItem

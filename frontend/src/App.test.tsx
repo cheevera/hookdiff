@@ -22,7 +22,8 @@ test('renders a method badge for each request', async () => {
   const { container } = renderWithProviders(<App />, { initialEntries: [`/${TEST_SLUG}`] })
   const firstMethod = HARDCODED_REQUESTS[0]?.method
   if (!firstMethod) throw new Error('fixture is empty')
-  expect(screen.getAllByText(firstMethod).length).toBeGreaterThan(0)
+  const badges = await screen.findAllByText(firstMethod)
+  expect(badges.length).toBeGreaterThan(0)
   await waitForShiki(container)
 })
 

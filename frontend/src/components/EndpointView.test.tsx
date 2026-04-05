@@ -72,6 +72,49 @@ test('clicking a sidebar item updates the detail panel', async () => {
   expect(container.querySelector('pre.shiki')?.textContent).not.toContain(firstBodyMarker)
 })
 
+test('shows a loading state while the request list is in flight', async () => {
+  let resolveRequests: (() => void) | null = null
+  server.use(
+    http.get(
+      '/api/endpoints/:slug/requests/',
+      () =>
+        new Promise<Response>((resolve) => {
+          resolveRequests = () => resolve(HttpResponse.json(MOCK_REQUESTS))
+        }),
+    ),
+  )
+
+  renderWithProviders(<App />, { initialEntries: ['/pendingx'] })
+
+  expect(await screen.findByText(/loading requests/i)).toBeInTheDocument()
+
+  if (!resolveRequests) throw new Error('handler did not capture resolver')
+  ;(resolveRequests as () => void)()
+
+  await waitFor(() => {
+    expect(screen.queryByText(/loading requests/i)).not.toBeInTheDocument()
+  })
+})
+
+test('shows an error state when the request list fails', async () => {
+  server.use(
+    http.get('/api/endpoints/:slug/requests/', () => new HttpResponse(null, { status: 500 })),
+  )
+
+  renderWithProviders(<App />, { initialEntries: ['/errslug1'] })
+
+  expect(await screen.findByText(/failed to load requests/i)).toBeInTheDocument()
+})
+
+test('shows the empty state when there are no requests for this endpoint', async () => {
+  server.use(http.get('/api/endpoints/:slug/requests/', () => HttpResponse.json([])))
+
+  renderWithProviders(<App />, { initialEntries: ['/emptysl1'] })
+
+  expect(await screen.findByText(/no requests yet/i)).toBeInTheDocument()
+  expect(screen.getByText(/no request selected/i)).toBeInTheDocument()
+})
+
 test('EndpointView renders nothing when the route has no slug param', () => {
   // Mount EndpointView on a route that does not define `:slug` so useParams()
   // returns undefined and the guard branch is exercised.
