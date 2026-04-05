@@ -1,0 +1,7 @@
+services:
+  frontend:
+    command: sleep infinity
+    volumes:
+      - .:/workspaces/hookdiff:cached
+      - frontend_node_modules:/workspaces/hookdiff/frontend/node_modules
+    working_dir: /workspaces/hookdiff

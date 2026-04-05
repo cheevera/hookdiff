@@ -1,0 +1,17 @@
+{
+  "name": "hookdiff",
+  "dockerComposeFile": ["../docker-compose.yml", "docker-compose.yml"],
+  "service": "frontend",
+  "workspaceFolder": "/workspaces/hookdiff",
+  "forwardPorts": [5173],
+  "postCreateCommand": "cd frontend && pnpm install",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "biomejs.biome",
+        "bradlc.vscode-tailwindcss",
+        "ms-azuretools.vscode-docker"
+      ]
+    }
+  }
+}

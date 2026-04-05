@@ -14,8 +14,8 @@ At-a-glance status of every implementation unit. This list is the single source 
 
 - [x] Frontend Dockerfile
 - [x] Root docker-compose.yml
-- [ ] Devcontainer config
-- [ ] .env.example
+- [x] Devcontainer config
+- [x] .env.example
 
 ### Phase 1: Frontend with mocked APIs
 
