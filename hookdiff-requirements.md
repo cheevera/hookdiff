@@ -29,7 +29,7 @@ At-a-glance status of every implementation unit. This list is the single source 
   - [x] Install and configure React Router
   - [x] Install and configure React Query
   - [x] Add a single smoke test that renders <App /> without crashing
-- [ ] Step 1.2 — Static shell with hardcoded endpoint URL
+- [x] Step 1.2 — Static shell with hardcoded endpoint URL
 - [ ] Step 1.3 — Endpoint creation flow with MSW
 - [ ] Step 1.4 — Request list from MSW
 - [ ] Step 1.5 — Real-time updates with a mock WebSocket
