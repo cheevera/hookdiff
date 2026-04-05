@@ -24,7 +24,7 @@ At-a-glance status of every implementation unit. This list is the single source 
   - [x] Install and configure Tailwind
   - [x] Install and configure Vitest
   - [x] Install and configure @testing-library/react
-  - [ ] Install and configure Biome (lint + format)
+  - [x] Install and configure Biome (lint + format)
   - [ ] Install and configure MSW
   - [ ] Install and configure React Router
   - [ ] Install and configure React Query
