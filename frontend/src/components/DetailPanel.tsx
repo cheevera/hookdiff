@@ -1,7 +1,10 @@
 import { HARDCODED_REQUESTS } from '../fixtures/requests'
+import { useTheme } from '../hooks/useTheme'
+import { JsonCode } from './JsonCode'
 import { MethodBadge } from './MethodBadge'
 
 export function DetailPanel() {
+  const { theme } = useTheme()
   const request = HARDCODED_REQUESTS[0]
   if (!request) {
     return (
@@ -19,9 +22,7 @@ export function DetailPanel() {
       <h2 className="mt-4 text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
         Body
       </h2>
-      <pre className="mt-2 overflow-x-auto rounded border border-gray-200 bg-gray-50 p-3 font-mono text-xs text-gray-800 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-200">
-        {JSON.stringify(request.body, null, 2)}
-      </pre>
+      <JsonCode value={request.body} theme={theme} />
     </section>
   )
 }
