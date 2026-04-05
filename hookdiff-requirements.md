@@ -36,7 +36,7 @@ At-a-glance status of every implementation unit. This list is the single source 
 - [x] Step 1.4 — Request list from MSW
 - Step 1.5 — Real-time updates with a mock WebSocket
   - [x] Unit A — Env helper and test WebSocket stub
-  - [ ] Unit B — Mock WebSocket class
+  - [x] Unit B — Mock WebSocket class
   - [ ] Unit C — WebSocket factory and useWebSocket hook
   - [ ] Unit D — Pinning, newCount badge, and jump to latest
   - [ ] Unit E — Dev-only connection status indicator
