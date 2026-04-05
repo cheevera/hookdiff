@@ -23,12 +23,12 @@ At-a-glance status of every implementation unit. This list is the single source 
   - [x] Scaffold Vite + React + TypeScript project with pnpm
   - [x] Install and configure Tailwind
   - [x] Install and configure Vitest
-  - [ ] Install and configure @testing-library/react
+  - [x] Install and configure @testing-library/react
   - [ ] Install and configure Biome (lint + format)
   - [ ] Install and configure MSW
   - [ ] Install and configure React Router
   - [ ] Install and configure React Query
-  - [ ] Add a single smoke test that renders <App /> without crashing
+  - [x] Add a single smoke test that renders <App /> without crashing
 - [ ] Step 1.2 — Static shell with hardcoded endpoint URL
 - [ ] Step 1.3 — Endpoint creation flow with MSW
 - [ ] Step 1.4 — Request list from MSW
