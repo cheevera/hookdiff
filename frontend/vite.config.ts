@@ -23,7 +23,6 @@ export default defineConfig({
         'src/**/*.test.{ts,tsx}',
         'src/main.tsx',
         'src/mocks/**',
-        'src/fixtures/**',
         'src/test/**',
         'src/types/**',
         'src/vite-env.d.ts',
