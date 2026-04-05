@@ -646,7 +646,6 @@ Subtle color coding for HTTP method badges:
 
 Short-term improvements that should happen soon but aren't blocking current work. Distinct from Future Considerations below, which are long-term product ideas.
 
-- **Pre-commit hooks.** Run `make check` before commits. Currently skipped because the habit works, but reconsider after the first "forgot to format" commit.
 - **Promote compose back to the root.** See "Current state" under Development Environment. Triggers when Step 2 lands.
 
 ---
