@@ -20,7 +20,7 @@ At-a-glance status of every implementation unit. This list is the single source 
 ### Phase 1: Frontend with mocked APIs
 
 - Step 1.1 — Project scaffold
-  - [ ] Scaffold Vite + React + TypeScript project with pnpm
+  - [x] Scaffold Vite + React + TypeScript project with pnpm
   - [ ] Install and configure Tailwind
   - [ ] Install and configure Vitest
   - [ ] Install and configure @testing-library/react

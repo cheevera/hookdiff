@@ -3,6 +3,8 @@ node_modules/
 dist/
 coverage/
 .vite/
+.pnpm-store/
+*.tsbuildinfo
 
 # Env
 .env
