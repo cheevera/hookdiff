@@ -1,6 +1,6 @@
 {
   "name": "hookdiff",
-  "dockerComposeFile": ["../docker-compose.yml", "docker-compose.yml"],
+  "dockerComposeFile": "docker-compose.yml",
   "service": "frontend",
   "workspaceFolder": "/workspaces/hookdiff",
   "forwardPorts": [5173],
