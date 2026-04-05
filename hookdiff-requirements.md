@@ -22,7 +22,7 @@ At-a-glance status of every implementation unit. This list is the single source 
 - Step 1.1 — Project scaffold
   - [x] Scaffold Vite + React + TypeScript project with pnpm
   - [x] Install and configure Tailwind
-  - [ ] Install and configure Vitest
+  - [x] Install and configure Vitest
   - [ ] Install and configure @testing-library/react
   - [ ] Install and configure Biome (lint + format)
   - [ ] Install and configure MSW
