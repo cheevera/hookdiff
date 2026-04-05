@@ -1,3 +1,3 @@
 export function App() {
-  return <div>Hookdiff</div>
+  return <div className="p-6 text-2xl font-semibold">Hookdiff</div>
 }
