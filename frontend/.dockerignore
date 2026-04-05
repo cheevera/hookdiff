@@ -1,0 +1,7 @@
+node_modules
+dist
+coverage
+.vite
+.pnpm-store
+*.tsbuildinfo
+.DS_Store

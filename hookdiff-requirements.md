@@ -12,8 +12,8 @@ At-a-glance status of every implementation unit. This list is the single source 
 
 ### Development Environment
 
-- [ ] Frontend Dockerfile
-- [ ] Root docker-compose.yml
+- [x] Frontend Dockerfile
+- [x] Root docker-compose.yml
 - [ ] Devcontainer config
 - [ ] .env.example
 
