@@ -58,6 +58,7 @@ Run from the repo root inside the devcontainer:
 |---|---|
 | `make dev` | Start the Vite dev server on port 5173 |
 | `make test` | Run the frontend test suite once |
+| `make coverage` | Run the frontend test suite with the 100% coverage gate |
 | `make build` | Type-check and produce a production build |
 | `make check` | Run Biome lint + format check (read-only) |
 | `make format` | Auto-fix Biome lint + format issues |
@@ -67,29 +68,4 @@ Running `make` with no target prints this list.
 
 ## Status
 
-Under active development. See `hookdiff-requirements.md` for the full spec and the Progress checklist at the top of that file for current implementation status.
-
-## Divergence from the spec
-
-`hookdiff-requirements.md` describes the end-state architecture: a root `docker-compose.yml` orchestrating the frontend, a Django backend, Postgres, and Redis, shared between the devcontainer and a host workflow. That's still the target.
-
-Today we're only on Step 1.2 (static frontend shell). Until the backend lands in Step 2, there is only one service, so:
-
-- There is no root `docker-compose.yml`. The only compose file is `.devcontainer/docker-compose.yml`.
-- The devcontainer uses its own minimal Dockerfile (`.devcontainer/Dockerfile`) instead of reusing `frontend/Dockerfile`, because the dev environment needs extra tools (git, make) that don't belong in the production frontend image.
-- The only supported way to run the project is "open in devcontainer, then `make dev`".
-
-When Step 2 adds the backend, we'll likely promote compose back to the root and point the devcontainer at it, matching the spec.
-
-## Deferred Improvements
-
-Worth doing soon, but not yet. Parked here so they don't get lost:
-
-- **Pin `packageManager` in `frontend/package.json`.** Add `"packageManager": "pnpm@10.33.0"` so every tool (corepack, CI, editor integrations) uses the same pnpm version. One source of truth instead of a version string hardcoded in `.devcontainer/Dockerfile`.
-- **CI workflow.** GitHub Actions running `make check && make test && make build` on pushes and pull requests. Low value solo, high value the moment a second contributor or a regression lands.
-- **Pre-commit hooks.** Run `make check` before commits. Currently skipped because the habit works, but reconsider after the first "forgot to format" commit.
-- **Promote compose back to the root.** See "Divergence from the spec" above. Triggers when Step 2 lands.
-
-## Future Considerations
-
-Endpoint history with switching between previous slugs, manual diff between any two requests, field pinning across requests over time, request replay, HMAC signature verification for common providers, non-JSON body support, user accounts, public deployment.
+**Work in progress.** The codebase today is a frontend-only React app with every API mocked at the network layer via MSW and a dev-only in-memory WebSocket for real-time updates. Phase 1 (frontend on mocked APIs) is through Step 1.5. Phase 2 (the Django backend, the real webhook receiver, and the real WebSocket consumer) and Phase 3 (the JSON diff view) are still ahead. See `hookdiff-requirements.md` for the full spec and the Progress checklist at the top for exact implementation status.

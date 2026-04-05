@@ -168,6 +168,16 @@ Managed via `.env` file. A committed `.env.example` documents all required varia
 - Ruff (lint + format) on all Python files
 - Biome (lint + format) on all TypeScript/TSX/JSON/CSS files
 
+### Current state
+
+The end-state architecture above describes a root `docker-compose.yml` orchestrating the frontend, a Django backend, Postgres, and Redis, shared between the devcontainer and a host workflow. That is still the target, but Phase 1 is frontend-only, so the repo is temporarily simpler:
+
+- There is no root `docker-compose.yml`. The only compose file is `.devcontainer/docker-compose.yml`.
+- The devcontainer uses its own minimal `.devcontainer/Dockerfile` instead of reusing `frontend/Dockerfile`, because the dev environment needs extra tools (git, make) that do not belong in the production frontend image.
+- The only supported way to run the project is "reopen in devcontainer, then `make dev`".
+
+When Step 2 adds the backend, compose will likely be promoted back to the root and the devcontainer pointed at it, matching the spec.
+
 ---
 
 ## Implementation Plan
@@ -629,6 +639,17 @@ Subtle color coding for HTTP method badges:
   - Sonner toast notification on URL copy
   - Light/dark toggle and localStorage persistence of preference
   - Connection status indicator visible only in development mode
+
+---
+
+## Deferred Improvements
+
+Short-term improvements that should happen soon but aren't blocking current work. Distinct from Future Considerations below, which are long-term product ideas.
+
+- **Pin `packageManager` in `frontend/package.json`.** Add `"packageManager": "pnpm@10.33.0"` so every tool (corepack, CI, editor integrations) uses the same pnpm version. One source of truth instead of a version string hardcoded in `.devcontainer/Dockerfile`.
+- **CI workflow.** GitHub Actions running `make check && make coverage && make build` on pushes and pull requests. Low value solo, high value the moment a second contributor or a regression lands.
+- **Pre-commit hooks.** Run `make check` before commits. Currently skipped because the habit works, but reconsider after the first "forgot to format" commit.
+- **Promote compose back to the root.** See "Current state" under Development Environment. Triggers when Step 2 lands.
 
 ---
 
