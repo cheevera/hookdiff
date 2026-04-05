@@ -34,12 +34,7 @@ At-a-glance status of every implementation unit. This list is the single source 
 - [x] Step 1.2 — Static shell with hardcoded endpoint URL
 - [x] Step 1.3 — Endpoint creation flow with MSW
 - [x] Step 1.4 — Request list from MSW
-- Step 1.5 — Real-time updates with a mock WebSocket
-  - [x] Unit A — Env helper and test WebSocket stub
-  - [x] Unit B — Mock WebSocket class
-  - [x] Unit C — WebSocket factory and useWebSocket hook
-  - [x] Unit D — Pinning, newCount badge, and jump to latest
-  - [x] Unit E — Dev-only connection status indicator
+- [x] Step 1.5 — Real-time updates with a mock WebSocket
 - [ ] Step 1.6 — Request deletion
 - [ ] Step 1.7 — Detail panel polish
 
