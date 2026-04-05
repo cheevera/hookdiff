@@ -1,7 +1,5 @@
 import type { WebhookRequest } from '../types/request'
 
-export const HARDCODED_ENDPOINT_URL = 'http://localhost:8000/hooks/a3f9bc2d/'
-
 export const HARDCODED_REQUESTS: WebhookRequest[] = [
   {
     id: 'req_01',

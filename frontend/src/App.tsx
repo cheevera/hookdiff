@@ -1,15 +1,12 @@
-import { DetailPanel } from './components/DetailPanel'
-import { Header } from './components/Header'
-import { Sidebar } from './components/Sidebar'
+import { Route, Routes } from 'react-router'
+import { EndpointView } from './components/EndpointView'
 
 export function App() {
   return (
     <div className="flex h-screen flex-col">
-      <Header />
-      <div className="flex flex-1 overflow-hidden">
-        <Sidebar />
-        <DetailPanel />
-      </div>
+      <Routes>
+        <Route path="/:slug" element={<EndpointView />} />
+      </Routes>
     </div>
   )
 }

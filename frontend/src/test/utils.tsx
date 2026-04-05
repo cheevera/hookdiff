@@ -4,18 +4,20 @@ import type { ReactElement, ReactNode } from 'react'
 import { MemoryRouter } from 'react-router'
 import { Toaster } from 'sonner'
 
-export function renderWithProviders(
-  ui: ReactElement,
-  options?: Omit<RenderOptions, 'wrapper'>,
-): RenderResult {
+type ProviderOptions = Omit<RenderOptions, 'wrapper'> & {
+  initialEntries?: string[]
+}
+
+export function renderWithProviders(ui: ReactElement, options?: ProviderOptions): RenderResult {
+  const { initialEntries = ['/'], ...renderOptions } = options ?? {}
   const queryClient = new QueryClient({
     defaultOptions: { queries: { retry: false } },
   })
   const Wrapper = ({ children }: { children: ReactNode }) => (
     <QueryClientProvider client={queryClient}>
-      <MemoryRouter>{children}</MemoryRouter>
+      <MemoryRouter initialEntries={initialEntries}>{children}</MemoryRouter>
       <Toaster />
     </QueryClientProvider>
   )
-  return render(ui, { wrapper: Wrapper, ...options })
+  return render(ui, { wrapper: Wrapper, ...renderOptions })
 }
