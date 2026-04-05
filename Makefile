@@ -1,19 +1,23 @@
-.PHONY: help dev test build check format install
+.PHONY: help dev test coverage build check format install
 
 help:
 	@echo "hookdiff — available make targets:"
-	@echo "  make dev      start the frontend dev server"
-	@echo "  make test     run frontend tests once"
-	@echo "  make build    build the frontend for production"
-	@echo "  make check    run biome lint + format check"
-	@echo "  make format   auto-fix biome lint + format issues"
-	@echo "  make install  install frontend dependencies"
+	@echo "  make dev       start the frontend dev server"
+	@echo "  make test      run frontend tests once"
+	@echo "  make coverage  run frontend tests with coverage report"
+	@echo "  make build     build the frontend for production"
+	@echo "  make check     run biome lint + format check"
+	@echo "  make format    auto-fix biome lint + format issues"
+	@echo "  make install   install frontend dependencies"
 
 dev:
 	pnpm --dir frontend dev
 
 test:
 	pnpm --dir frontend test:run
+
+coverage:
+	pnpm --dir frontend test:coverage
 
 build:
 	pnpm --dir frontend build
