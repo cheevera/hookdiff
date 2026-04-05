@@ -18,12 +18,14 @@ function formatTime(iso: string): string {
 
 function SidebarItem({ request }: { request: WebhookRequest }) {
   return (
-    <li className="border-b border-gray-200 px-4 py-3">
+    <li className="border-b border-gray-200 px-4 py-3 dark:border-gray-800">
       <div className="flex items-center gap-2">
         <MethodBadge method={request.method} />
-        <span className="text-xs text-gray-500">{formatTime(request.receivedAt)}</span>
+        <span className="text-xs text-gray-500 dark:text-gray-400">
+          {formatTime(request.receivedAt)}
+        </span>
       </div>
-      <div className="mt-1 truncate font-mono text-xs text-gray-600">
+      <div className="mt-1 truncate font-mono text-xs text-gray-600 dark:text-gray-400">
         {bodyPreview(request.body)}
       </div>
     </li>
@@ -32,7 +34,7 @@ function SidebarItem({ request }: { request: WebhookRequest }) {
 
 export function Sidebar() {
   return (
-    <aside className="w-80 shrink-0 overflow-y-auto border-r border-gray-200">
+    <aside className="w-80 shrink-0 overflow-y-auto border-r border-gray-200 bg-gray-50 dark:border-gray-800 dark:bg-gray-900">
       <ul>
         {HARDCODED_REQUESTS.map((request) => (
           <SidebarItem key={request.id} request={request} />
