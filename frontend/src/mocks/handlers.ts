@@ -1,3 +1,16 @@
-import type { HttpHandler } from 'msw'
+import { type HttpHandler, HttpResponse, http } from 'msw'
 
-export const handlers: HttpHandler[] = []
+export function generateSlug(): string {
+  return crypto.randomUUID().replace(/-/g, '').slice(0, 8)
+}
+
+export const handlers: HttpHandler[] = [
+  http.post('/api/endpoints/', () => {
+    const slug = generateSlug()
+    return HttpResponse.json({
+      slug,
+      url: `http://localhost:8000/hooks/${slug}/`,
+      createdAt: new Date().toISOString(),
+    })
+  }),
+]
