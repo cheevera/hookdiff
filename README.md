@@ -29,9 +29,66 @@ Webhook debugging tools usually stop at "show me the request". When you're integ
 | Tooling | uv (Python), pnpm (Node), Ruff, Biome |
 | Infra | Docker Compose, VS Code devcontainer |
 
+## Getting Started
+
+Prerequisites:
+
+- Docker Desktop (or equivalent)
+- VS Code with the **Dev Containers** extension (`ms-vscode-remote.remote-containers`)
+
+Steps:
+
+1. Clone the repo and open it in VS Code.
+2. When prompted, click **Reopen in Container** (or run the command **Dev Containers: Reopen in Container**). The first build installs Node, pnpm, git, and make, then runs `pnpm install` via `postCreateCommand`.
+3. Open a terminal inside the devcontainer (`` Ctrl+` ``) and run:
+
+   ```
+   make dev
+   ```
+
+4. Visit http://localhost:5173 in your host browser.
+
+The devcontainer is the only supported entry point today. Running the frontend directly on the host is untested and not recommended.
+
+## Make Targets
+
+Run from the repo root inside the devcontainer:
+
+| Target | What it does |
+|---|---|
+| `make dev` | Start the Vite dev server on port 5173 |
+| `make test` | Run the frontend test suite once |
+| `make build` | Type-check and produce a production build |
+| `make check` | Run Biome lint + format check (read-only) |
+| `make format` | Auto-fix Biome lint + format issues |
+| `make install` | Install frontend dependencies |
+
+Running `make` with no target prints this list.
+
 ## Status
 
 Under active development. See `hookdiff-requirements.md` for the full spec and the Progress checklist at the top of that file for current implementation status.
+
+## Divergence from the spec
+
+`hookdiff-requirements.md` describes the end-state architecture: a root `docker-compose.yml` orchestrating the frontend, a Django backend, Postgres, and Redis, shared between the devcontainer and a host workflow. That's still the target.
+
+Today we're only on Step 1.2 (static frontend shell). Until the backend lands in Step 2, there is only one service, so:
+
+- There is no root `docker-compose.yml`. The only compose file is `.devcontainer/docker-compose.yml`.
+- The devcontainer uses its own minimal Dockerfile (`.devcontainer/Dockerfile`) instead of reusing `frontend/Dockerfile`, because the dev environment needs extra tools (git, make) that don't belong in the production frontend image.
+- The only supported way to run the project is "open in devcontainer, then `make dev`".
+
+When Step 2 adds the backend, we'll likely promote compose back to the root and point the devcontainer at it, matching the spec.
+
+## Deferred Improvements
+
+Worth doing soon, but not yet. Parked here so they don't get lost:
+
+- **Pin `packageManager` in `frontend/package.json`.** Add `"packageManager": "pnpm@10.33.0"` so every tool (corepack, CI, editor integrations) uses the same pnpm version. One source of truth instead of a version string hardcoded in `.devcontainer/Dockerfile`.
+- **CI workflow.** GitHub Actions running `make check && make test && make build` on pushes and pull requests. Low value solo, high value the moment a second contributor or a regression lands.
+- **Pre-commit hooks.** Run `make check` before commits. Currently skipped because the habit works, but reconsider after the first "forgot to format" commit.
+- **Promote compose back to the root.** See "Divergence from the spec" above. Triggers when Step 2 lands.
 
 ## Future Considerations
 
