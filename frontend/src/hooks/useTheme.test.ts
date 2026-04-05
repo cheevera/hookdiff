@@ -1,5 +1,5 @@
 import { act, renderHook } from '@testing-library/react'
-import { afterEach, beforeEach, expect, test } from 'vitest'
+import { afterEach, beforeEach, expect, test, vi } from 'vitest'
 import { useTheme } from './useTheme'
 
 beforeEach(() => {
@@ -10,6 +10,7 @@ beforeEach(() => {
 afterEach(() => {
   document.documentElement.classList.remove('dark')
   localStorage.clear()
+  vi.restoreAllMocks()
 })
 
 test('default theme reflects the class on the html element', () => {
@@ -35,4 +36,16 @@ test('setTheme("light") removes the dark class and writes localStorage', () => {
   })
   expect(document.documentElement.classList.contains('dark')).toBe(false)
   expect(localStorage.getItem('hookdiff-theme')).toBe('light')
+})
+
+test('swallows errors when localStorage.setItem throws', () => {
+  vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
+    throw new Error('blocked')
+  })
+  expect(() => {
+    const { result } = renderHook(() => useTheme())
+    act(() => {
+      result.current.toggle()
+    })
+  }).not.toThrow()
 })

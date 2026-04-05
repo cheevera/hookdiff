@@ -5,7 +5,6 @@ export type Theme = 'light' | 'dark'
 const STORAGE_KEY = 'hookdiff-theme'
 
 function readInitialTheme(): Theme {
-  if (typeof document === 'undefined') return 'light'
   return document.documentElement.classList.contains('dark') ? 'dark' : 'light'
 }
 
