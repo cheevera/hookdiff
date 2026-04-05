@@ -25,7 +25,7 @@ At-a-glance status of every implementation unit. This list is the single source 
   - [x] Install and configure Vitest
   - [x] Install and configure @testing-library/react
   - [x] Install and configure Biome (lint + format)
-  - [ ] Install and configure MSW
+  - [x] Install and configure MSW
   - [ ] Install and configure React Router
   - [ ] Install and configure React Query
   - [x] Add a single smoke test that renders <App /> without crashing
