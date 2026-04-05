@@ -1,8 +1,9 @@
 // A tiny WebSocket stand-in for jsdom tests. jsdom 26 does not ship a
-// `globalThis.WebSocket`, so setup.ts installs this class as the global and
-// resets the tracked instances between tests. Test code can grab the created
-// sockets via `getTestWebSockets()` and drive them directly by dispatching
-// MessageEvent / Event instances.
+// `globalThis.WebSocket`, and MSW 2.x patches the global as part of
+// `server.listen()`. `src/test/setup.ts` installs this class AFTER
+// `server.listen()` runs so that our tests control socket creation. Test code
+// can grab the created sockets via `getTestWebSockets()` and drive them
+// directly by dispatching MessageEvent / Event instances.
 
 const instances: TestWebSocket[] = []
 
