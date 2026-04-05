@@ -1,11 +1,10 @@
-import { HARDCODED_REQUESTS } from '../fixtures/requests'
 import { useTheme } from '../hooks/useTheme'
+import type { WebhookRequest } from '../types/request'
 import { JsonCode } from './JsonCode'
 import { MethodBadge } from './MethodBadge'
 
-export function DetailPanel() {
+export function DetailPanel({ request }: { request: WebhookRequest | null }) {
   const { theme } = useTheme()
-  const request = HARDCODED_REQUESTS[0]
   if (!request) {
     return (
       <section className="flex-1 p-6 text-sm text-gray-500 dark:text-gray-400">
