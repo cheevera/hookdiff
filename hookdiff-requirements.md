@@ -646,7 +646,6 @@ Subtle color coding for HTTP method badges:
 
 Short-term improvements that should happen soon but aren't blocking current work. Distinct from Future Considerations below, which are long-term product ideas.
 
-- **Pin `packageManager` in `frontend/package.json`.** Add `"packageManager": "pnpm@10.33.0"` so every tool (corepack, CI, editor integrations) uses the same pnpm version. One source of truth instead of a version string hardcoded in `.devcontainer/Dockerfile`.
 - **CI workflow.** GitHub Actions running `make check && make coverage && make build` on pushes and pull requests. Low value solo, high value the moment a second contributor or a regression lands.
 - **Pre-commit hooks.** Run `make check` before commits. Currently skipped because the habit works, but reconsider after the first "forgot to format" commit.
 - **Promote compose back to the root.** See "Current state" under Development Environment. Triggers when Step 2 lands.
