@@ -1,7 +1,8 @@
-import { render, screen } from '@testing-library/react'
+import { screen } from '@testing-library/react'
 import { App } from './App'
+import { renderWithRouter } from './test/utils'
 
 test('renders the app title', () => {
-  render(<App />)
+  renderWithRouter(<App />)
   expect(screen.getByText('Hookdiff')).toBeInTheDocument()
 })
