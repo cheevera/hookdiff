@@ -32,6 +32,8 @@ test('renders each request with its method badge and body preview', () => {
       isError={false}
       selectedId="req_a"
       onSelect={() => {}}
+      newCount={0}
+      onJumpToLatest={() => {}}
     />,
   )
   expect(screen.getByText('POST')).toBeInTheDocument()
@@ -48,6 +50,8 @@ test('marks the selected request with data-selected=true on its button', () => {
       isError={false}
       selectedId="req_b"
       onSelect={() => {}}
+      newCount={0}
+      onJumpToLatest={() => {}}
     />,
   )
   const buttons = screen.getAllByRole('button')
@@ -67,6 +71,8 @@ test('calls onSelect with the clicked request id', async () => {
       isError={false}
       selectedId="req_a"
       onSelect={onSelect}
+      newCount={0}
+      onJumpToLatest={() => {}}
     />,
   )
   const buttons = screen.getAllByRole('button')
@@ -97,6 +103,8 @@ test('bodyPreview falls back to String(body) when JSON.stringify throws', () => 
       isError={false}
       selectedId={null}
       onSelect={() => {}}
+      newCount={0}
+      onJumpToLatest={() => {}}
     />,
   )
   expect(screen.getByText('[object Object]')).toBeInTheDocument()
@@ -110,6 +118,8 @@ test('shows a loading message while the query is pending', () => {
       isError={false}
       selectedId={null}
       onSelect={() => {}}
+      newCount={0}
+      onJumpToLatest={() => {}}
     />,
   )
   expect(screen.getByText(/loading requests/i)).toBeInTheDocument()
@@ -124,6 +134,8 @@ test('shows an error message when the query fails', () => {
       isError={true}
       selectedId={null}
       onSelect={() => {}}
+      newCount={0}
+      onJumpToLatest={() => {}}
     />,
   )
   expect(screen.getByText(/failed to load requests/i)).toBeInTheDocument()
@@ -137,6 +149,8 @@ test('shows an empty state when there are no requests', () => {
       isError={false}
       selectedId={null}
       onSelect={() => {}}
+      newCount={0}
+      onJumpToLatest={() => {}}
     />,
   )
   expect(screen.getByText(/no requests yet/i)).toBeInTheDocument()
@@ -150,6 +164,8 @@ test('shows a header with request count and last-received time', () => {
       isError={false}
       selectedId="req_a"
       onSelect={() => {}}
+      newCount={0}
+      onJumpToLatest={() => {}}
     />,
   )
   expect(screen.getByText('2 requests')).toBeInTheDocument()
@@ -175,6 +191,8 @@ test('truncates body previews longer than PREVIEW_MAX_LEN with an ellipsis', () 
       isError={false}
       selectedId={null}
       onSelect={() => {}}
+      newCount={0}
+      onJumpToLatest={() => {}}
     />,
   )
   const previews = screen.getAllByText(/x+…$/)
@@ -183,4 +201,69 @@ test('truncates body previews longer than PREVIEW_MAX_LEN with an ellipsis', () 
   if (!preview) throw new Error('expected a truncated preview')
   expect(preview.textContent?.endsWith('…')).toBe(true)
   expect((preview.textContent ?? '').length).toBeLessThanOrEqual(81)
+})
+
+test('renders the N-new-requests badge and jump button when newCount > 0', () => {
+  renderWithProviders(
+    <Sidebar
+      requests={sampleRequests}
+      isLoading={false}
+      isError={false}
+      selectedId="req_a"
+      onSelect={() => {}}
+      newCount={3}
+      onJumpToLatest={() => {}}
+    />,
+  )
+  expect(screen.getByText('3 new requests')).toBeInTheDocument()
+  expect(screen.getByRole('button', { name: /jump to latest/i })).toBeInTheDocument()
+})
+
+test('uses singular "request" when newCount === 1', () => {
+  renderWithProviders(
+    <Sidebar
+      requests={sampleRequests}
+      isLoading={false}
+      isError={false}
+      selectedId="req_a"
+      onSelect={() => {}}
+      newCount={1}
+      onJumpToLatest={() => {}}
+    />,
+  )
+  expect(screen.getByText('1 new request')).toBeInTheDocument()
+})
+
+test('hides the badge and jump button when newCount === 0', () => {
+  renderWithProviders(
+    <Sidebar
+      requests={sampleRequests}
+      isLoading={false}
+      isError={false}
+      selectedId="req_a"
+      onSelect={() => {}}
+      newCount={0}
+      onJumpToLatest={() => {}}
+    />,
+  )
+  expect(screen.queryByText(/new request/i)).not.toBeInTheDocument()
+  expect(screen.queryByRole('button', { name: /jump to latest/i })).not.toBeInTheDocument()
+})
+
+test('calls onJumpToLatest when the jump button is clicked', async () => {
+  const user = userEvent.setup()
+  const onJumpToLatest = vi.fn()
+  renderWithProviders(
+    <Sidebar
+      requests={sampleRequests}
+      isLoading={false}
+      isError={false}
+      selectedId="req_a"
+      onSelect={() => {}}
+      newCount={2}
+      onJumpToLatest={onJumpToLatest}
+    />,
+  )
+  await user.click(screen.getByRole('button', { name: /jump to latest/i }))
+  expect(onJumpToLatest).toHaveBeenCalledTimes(1)
 })

@@ -8,7 +8,14 @@ type ProviderOptions = Omit<RenderOptions, 'wrapper'> & {
   initialEntries?: string[]
 }
 
-export function renderWithProviders(ui: ReactElement, options?: ProviderOptions): RenderResult {
+export type RenderWithProvidersResult = RenderResult & {
+  queryClient: QueryClient
+}
+
+export function renderWithProviders(
+  ui: ReactElement,
+  options?: ProviderOptions,
+): RenderWithProvidersResult {
   const { initialEntries = ['/'], ...renderOptions } = options ?? {}
   const queryClient = new QueryClient({
     defaultOptions: { queries: { retry: false } },
@@ -19,5 +26,6 @@ export function renderWithProviders(ui: ReactElement, options?: ProviderOptions)
       <Toaster />
     </QueryClientProvider>
   )
-  return render(ui, { wrapper: Wrapper, ...renderOptions })
+  const result = render(ui, { wrapper: Wrapper, ...renderOptions })
+  return { ...result, queryClient }
 }

@@ -69,12 +69,22 @@ type SidebarProps = {
   isError: boolean
   selectedId: string | null
   onSelect: (id: string) => void
+  newCount: number
+  onJumpToLatest: () => void
 }
 
 const shellClass =
   'w-80 shrink-0 overflow-y-auto border-r border-gray-200 bg-gray-50 dark:border-gray-800 dark:bg-gray-900'
 
-export function Sidebar({ requests, isLoading, isError, selectedId, onSelect }: SidebarProps) {
+export function Sidebar({
+  requests,
+  isLoading,
+  isError,
+  selectedId,
+  onSelect,
+  newCount,
+  onJumpToLatest,
+}: SidebarProps) {
   if (isLoading) {
     return (
       <aside className={shellClass}>
@@ -104,6 +114,20 @@ export function Sidebar({ requests, isLoading, isError, selectedId, onSelect }: 
   }
   return (
     <aside className={shellClass}>
+      {newCount > 0 && (
+        <div className="flex items-center justify-between border-b border-gray-200 bg-gray-100 px-4 py-2 text-xs text-gray-700 dark:border-gray-800 dark:bg-gray-800 dark:text-gray-300">
+          <span>
+            {newCount} new request{newCount === 1 ? '' : 's'}
+          </span>
+          <button
+            type="button"
+            onClick={onJumpToLatest}
+            className="font-medium text-blue-600 hover:underline dark:text-blue-400"
+          >
+            Jump to latest
+          </button>
+        </div>
+      )}
       <div className="border-b border-gray-200 px-4 py-3 text-xs text-gray-600 dark:border-gray-800 dark:text-gray-400">
         <div>{requests.length} requests</div>
         <div>Last: {formatTime(latestReceivedAt(requests))}</div>

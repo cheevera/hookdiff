@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router'
 import { useCreateEndpoint } from '../hooks/useCreateEndpoint'
 import { useRequests } from '../hooks/useRequests'
+import { useWebSocket } from '../hooks/useWebSocket'
 import { clearStoredSlug, writeStoredSlug } from '../lib/endpoint'
 import { DetailPanel } from './DetailPanel'
 import { Header } from './Header'
@@ -13,7 +14,11 @@ export function EndpointView() {
   const mutation = useCreateEndpoint()
   const { data: requests, isLoading, isError } = useRequests(slug)
   const list = requests ?? []
-  const [selectedId, setSelectedId] = useState<string | null>(null)
+  const [pinnedId, setPinnedId] = useState<string | null>(null)
+  // Snapshot of `list.length` at pin time so the "N new" badge counts only
+  // requests that arrived after pinning, not pre-existing items above the pin.
+  const [pinnedAtLength, setPinnedAtLength] = useState(0)
+  useWebSocket(slug)
 
   // Keep localStorage in sync with the currently viewed endpoint so reloads
   // land on the last viewed slug.
@@ -21,17 +26,15 @@ export function EndpointView() {
     if (slug) writeStoredSlug(slug)
   }, [slug])
 
-  // Default selection: keep `selectedId` pointing at an item in the current
-  // list whenever the slug changes or the list arrives. Empty list means
-  // selection stays null and the detail panel shows its empty state.
+  // Drop a stale pin if the pinned request leaves the list (e.g. slug change
+  // or test-driven cache swap). Auto-follow is otherwise derived from `list`.
   useEffect(() => {
-    if (list.length === 0) {
-      setSelectedId(null)
-      return
+    if (pinnedId === null) return
+    if (!list.some((r) => r.id === pinnedId)) {
+      setPinnedId(null)
+      setPinnedAtLength(0)
     }
-    if (list.some((r) => r.id === selectedId)) return
-    setSelectedId(list[0].id)
-  }, [list, selectedId])
+  }, [list, pinnedId])
 
   if (!slug) {
     return null
@@ -46,7 +49,21 @@ export function EndpointView() {
     })
   }
 
-  const selectedRequest = list.find((r) => r.id === selectedId) ?? null
+  const handlePin = (id: string) => {
+    setPinnedId(id)
+    setPinnedAtLength(list.length)
+  }
+
+  const handleJumpToLatest = () => {
+    setPinnedId(null)
+    setPinnedAtLength(0)
+  }
+
+  const pinnedIndex = pinnedId === null ? -1 : list.findIndex((r) => r.id === pinnedId)
+  const newCount = pinnedId !== null ? Math.max(0, list.length - pinnedAtLength) : 0
+  const pinnedRequest = pinnedIndex >= 0 ? list[pinnedIndex] : undefined
+  const displayedRequest = pinnedRequest ?? list[0] ?? null
+  const displayedId = displayedRequest?.id ?? null
 
   return (
     <>
@@ -56,10 +73,12 @@ export function EndpointView() {
           requests={list}
           isLoading={isLoading}
           isError={isError}
-          selectedId={selectedId}
-          onSelect={setSelectedId}
+          selectedId={displayedId}
+          onSelect={handlePin}
+          newCount={newCount}
+          onJumpToLatest={handleJumpToLatest}
         />
-        <DetailPanel request={selectedRequest} />
+        <DetailPanel request={displayedRequest} />
       </div>
     </>
   )
