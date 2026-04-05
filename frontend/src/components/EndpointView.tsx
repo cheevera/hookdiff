@@ -4,6 +4,7 @@ import { useCreateEndpoint } from '../hooks/useCreateEndpoint'
 import { useRequests } from '../hooks/useRequests'
 import { useWebSocket } from '../hooks/useWebSocket'
 import { clearStoredSlug, writeStoredSlug } from '../lib/endpoint'
+import { ConnectionStatus } from './ConnectionStatus'
 import { DetailPanel } from './DetailPanel'
 import { Header } from './Header'
 import { Sidebar } from './Sidebar'
@@ -18,7 +19,7 @@ export function EndpointView() {
   // Snapshot of `list.length` at pin time so the "N new" badge counts only
   // requests that arrived after pinning, not pre-existing items above the pin.
   const [pinnedAtLength, setPinnedAtLength] = useState(0)
-  useWebSocket(slug)
+  const { status: wsStatus } = useWebSocket(slug)
 
   // Keep localStorage in sync with the currently viewed endpoint so reloads
   // land on the last viewed slug.
@@ -80,6 +81,7 @@ export function EndpointView() {
         />
         <DetailPanel request={displayedRequest} />
       </div>
+      <ConnectionStatus status={wsStatus} />
     </>
   )
 }

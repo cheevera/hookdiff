@@ -39,7 +39,7 @@ At-a-glance status of every implementation unit. This list is the single source 
   - [x] Unit B — Mock WebSocket class
   - [x] Unit C — WebSocket factory and useWebSocket hook
   - [x] Unit D — Pinning, newCount badge, and jump to latest
-  - [ ] Unit E — Dev-only connection status indicator
+  - [x] Unit E — Dev-only connection status indicator
 - [ ] Step 1.6 — Request deletion
 - [ ] Step 1.7 — Detail panel polish
 
