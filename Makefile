@@ -68,7 +68,7 @@ migrate:
 
 # Combined
 dev:
-	pnpm --dir frontend exec concurrently --kill-others --names "front,back" --prefix-colors "cyan,magenta" "make dev-front" "make dev-back"
+	pnpm --dir frontend exec concurrently --kill-others --names "front,back" --prefix-colors "cyan,magenta" "make -C $(CURDIR) dev-front" "make -C $(CURDIR) dev-back"
 
 check: check-front check-back
 
