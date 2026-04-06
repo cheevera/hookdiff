@@ -1,10 +1,30 @@
+import { useState } from 'react'
 import { useTheme } from '../hooks/useTheme'
 import type { WebhookRequest } from '../types/request'
 import { JsonCode } from './JsonCode'
 import { MethodBadge } from './MethodBadge'
 
+function KeyValueList({ entries }: { entries: Record<string, string> }) {
+  return (
+    <dl className="mt-2 rounded border border-gray-200 bg-gray-50 font-mono text-xs dark:border-gray-800 dark:bg-gray-900">
+      {Object.entries(entries).map(([key, value]) => (
+        <div
+          key={key}
+          className="flex gap-2 border-b border-gray-200 px-3 py-1.5 last:border-b-0 dark:border-gray-800"
+        >
+          <dt className="font-bold text-gray-500 dark:text-gray-400">{key}</dt>
+          <dd className="text-gray-700 dark:text-gray-300">{value}</dd>
+        </div>
+      ))}
+    </dl>
+  )
+}
+
 export function DetailPanel({ request }: { request: WebhookRequest | null }) {
   const { theme } = useTheme()
+  const [showHeaders, setShowHeaders] = useState(false)
+  const [showQueryParams, setShowQueryParams] = useState(false)
+
   if (!request) {
     return (
       <section className="flex-1 p-6 text-sm text-gray-500 dark:text-gray-400">
@@ -12,12 +32,62 @@ export function DetailPanel({ request }: { request: WebhookRequest | null }) {
       </section>
     )
   }
+
+  const headerCount = Object.keys(request.headers).length
+  const queryParamCount = Object.keys(request.queryParams).length
+
   return (
     <section className="flex flex-1 flex-col overflow-y-auto bg-white p-6 dark:bg-gray-950">
       <div className="flex items-center gap-3">
         <MethodBadge method={request.method} />
-        <span className="text-xs text-gray-500 dark:text-gray-400">{request.receivedAt}</span>
+        <span className="text-xs text-gray-500 dark:text-gray-400">
+          {new Date(request.receivedAt).toLocaleString()}
+        </span>
       </div>
+
+      <div className="mt-3 flex">
+        <button
+          type="button"
+          className="rounded-l-full border border-gray-300 bg-gray-100 px-3 py-1 text-xs font-medium text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+        >
+          Detail
+        </button>
+        <button
+          type="button"
+          disabled
+          title="Available when comparing requests"
+          className="rounded-r-full border border-l-0 border-gray-300 px-3 py-1 text-xs font-medium text-gray-500 opacity-50 cursor-not-allowed dark:border-gray-700 dark:text-gray-400"
+        >
+          Diff
+        </button>
+      </div>
+
+      {headerCount > 0 && (
+        <div className="mt-4">
+          <button
+            type="button"
+            onClick={() => setShowHeaders(!showHeaders)}
+            className="text-xs font-semibold uppercase tracking-wide text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+          >
+            Headers ({headerCount})
+          </button>
+          {showHeaders && <KeyValueList entries={request.headers} />}
+        </div>
+      )}
+
+      {queryParamCount > 0 && (
+        <div className="mt-4">
+          <button
+            type="button"
+            onClick={() => setShowQueryParams(!showQueryParams)}
+            className="text-xs font-semibold uppercase tracking-wide text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+          >
+            Query params ({queryParamCount})
+          </button>
+          {showQueryParams && <KeyValueList entries={request.queryParams} />}
+        </div>
+      )}
+
       <h2 className="mt-4 text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
         Body
       </h2>

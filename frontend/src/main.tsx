@@ -11,7 +11,7 @@ const queryClient = new QueryClient()
 
 function AppToaster() {
   const { theme } = useTheme()
-  return <Toaster richColors position="bottom-right" theme={theme} />
+  return <Toaster richColors position="top-center" theme={theme} />
 }
 
 async function startApp() {
