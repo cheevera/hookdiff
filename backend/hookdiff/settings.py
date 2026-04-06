@@ -53,6 +53,32 @@ CHANNEL_LAYERS = {
 
 ASGI_APPLICATION = "hookdiff.asgi.application"
 
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "brief": {
+            "format": "%(levelname)s %(message)s",
+        },
+    },
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "formatter": "brief",
+        },
+    },
+    "loggers": {
+        "django.request": {
+            "handlers": ["console"],
+            "level": "INFO",
+        },
+        "django.server": {
+            "handlers": ["console"],
+            "level": "INFO",
+        },
+    },
+}
+
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 FRONTEND_DIR = BASE_DIR.parent / "frontend" / "dist"

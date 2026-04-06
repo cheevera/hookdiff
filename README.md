@@ -1,5 +1,7 @@
 # hookdiff
 
+> **Work in progress.** Request capture, real-time streaming, and the full REST API are functional. JSON diff view (the core differentiator) is not yet implemented. See the Status section at the bottom for details.
+
 A local developer tool for capturing, inspecting, and diffing incoming webhook requests. Inspired by webhook.site, with a core differentiator: structured JSON diff and field-level value tracking across multiple captured requests.
 
 The initial version is scoped for personal local use. The architecture is designed to support public deployment and user accounts in the future.
@@ -43,17 +45,12 @@ Steps:
 3. Open a terminal inside the devcontainer (`` Ctrl+` ``) and run:
 
    ```
-   make migrate
    make dev
    ```
 
+   Migrations run automatically on container start. `make dev` starts both the Vite frontend and Django backend concurrently.
+
 4. Visit http://localhost:5173 in your host browser.
-
-To start the Django backend (serves the API and the built SPA):
-
-```
-make dev-back
-```
 
 The devcontainer is the only supported entry point today. Running the project directly on the host is untested and not recommended.
 
@@ -65,7 +62,7 @@ Run from the repo root inside the devcontainer:
 
 | Target | What it does |
 |---|---|
-| `make dev` | Start the Vite dev server on port 5173 |
+| `make dev-front` | Start the Vite dev server on port 5173 |
 | `make test` | Run the frontend test suite once |
 | `make coverage` | Run the frontend test suite with the 100% coverage gate |
 | `make build` | Type-check and produce a production build |
@@ -88,6 +85,7 @@ Run from the repo root inside the devcontainer:
 
 | Target | What it does |
 |---|---|
+| `make dev` | Start frontend + backend concurrently |
 | `make check` | Run both Biome + Ruff checks |
 | `make format` | Run both Biome + Ruff fixes |
 
