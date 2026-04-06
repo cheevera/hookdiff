@@ -31,7 +31,8 @@ test('renders a method badge for each request', async () => {
 test('renders the detail panel body JSON', async () => {
   const { container } = renderWithProviders(<App />, { initialEntries: [`/${TEST_SLUG}`] })
   await waitForShiki(container)
-  const shikiPre = container.querySelector('pre.shiki')
-  if (!shikiPre) throw new Error('expected shiki pre element')
-  expect(shikiPre.textContent).toContain('payment_intent.succeeded')
+  const allShikiText = Array.from(container.querySelectorAll('pre.shiki'))
+    .map((p) => p.textContent ?? '')
+    .join('\n')
+  expect(allShikiText).toContain('payment_intent.succeeded')
 })

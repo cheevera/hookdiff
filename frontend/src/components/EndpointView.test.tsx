@@ -25,6 +25,13 @@ afterEach(() => {
   vi.restoreAllMocks()
 })
 
+/** Concatenate textContent of all Shiki-rendered `<pre>` elements. */
+function getAllShikiText(container: HTMLElement): string {
+  return Array.from(container.querySelectorAll('pre.shiki'))
+    .map((p) => p.textContent ?? '')
+    .join('\n')
+}
+
 test('clicking New Endpoint creates a new endpoint, updates localStorage, and navigates to the new slug', async () => {
   server.use(
     http.post('/api/endpoints/', () =>
@@ -62,7 +69,7 @@ test('clicking a sidebar item updates the detail panel', async () => {
     expect(container.querySelector('pre.shiki')).not.toBeNull()
   })
   const firstBodyMarker = 'payment_intent.succeeded'
-  expect(container.querySelector('pre.shiki')?.textContent).toContain(firstBodyMarker)
+  expect(getAllShikiText(container)).toContain(firstBodyMarker)
 
   // Click the button for the second mock request (PUT, userId 918).
   const secondRequest = MOCK_REQUESTS[1]
@@ -74,9 +81,9 @@ test('clicking a sidebar item updates the detail panel', async () => {
 
   // Detail panel re-renders through Shiki with the new request body.
   await waitFor(() => {
-    expect(container.querySelector('pre.shiki')?.textContent).toContain('Ada Lovelace')
+    expect(getAllShikiText(container)).toContain('Ada Lovelace')
   })
-  expect(container.querySelector('pre.shiki')?.textContent).not.toContain(firstBodyMarker)
+  expect(getAllShikiText(container)).not.toContain(firstBodyMarker)
 })
 
 test('shows a loading state while the request list is in flight', async () => {
@@ -173,7 +180,7 @@ test('pinning prevents new arrivals from switching the detail panel', async () =
   if (!putButton) throw new Error('expected a sidebar button for the PUT request')
   await user.click(putButton)
   await waitFor(() => {
-    expect(container.querySelector('pre.shiki')?.textContent).toContain('Ada Lovelace')
+    expect(getAllShikiText(container)).toContain('Ada Lovelace')
   })
 
   const incoming = makeIncomingRequest({ id: 'ws_incoming_pin', body: { marker: 'do-not-switch' } })
@@ -182,8 +189,8 @@ test('pinning prevents new arrivals from switching the detail panel', async () =
   await waitFor(() => {
     expect(screen.getByText('4 requests')).toBeInTheDocument()
   })
-  expect(container.querySelector('pre.shiki')?.textContent).toContain('Ada Lovelace')
-  expect(container.querySelector('pre.shiki')?.textContent).not.toContain('do-not-switch')
+  expect(getAllShikiText(container)).toContain('Ada Lovelace')
+  expect(getAllShikiText(container)).not.toContain('do-not-switch')
 })
 
 test('shows N new requests badge and jump-to-latest button while pinned', async () => {
@@ -219,7 +226,7 @@ test('jump to latest clears the pin, displays the latest, and re-engages auto-fo
   if (!putButton) throw new Error('expected a sidebar button for the PUT request')
   await user.click(putButton)
   await waitFor(() => {
-    expect(container.querySelector('pre.shiki')?.textContent).toContain('Ada Lovelace')
+    expect(getAllShikiText(container)).toContain('Ada Lovelace')
   })
 
   await pushWebhook(makeIncomingRequest({ id: 'ws_jump_01', body: { marker: 'first-new' } }))
@@ -229,12 +236,12 @@ test('jump to latest clears the pin, displays the latest, and re-engages auto-fo
 
   await user.click(screen.getByRole('button', { name: /jump to latest/i }))
   await waitFor(() => {
-    expect(container.querySelector('pre.shiki')?.textContent).toContain('first-new')
+    expect(getAllShikiText(container)).toContain('first-new')
   })
 
   await pushWebhook(makeIncomingRequest({ id: 'ws_jump_02', body: { marker: 'second-new' } }))
   await waitFor(() => {
-    expect(container.querySelector('pre.shiki')?.textContent).toContain('second-new')
+    expect(getAllShikiText(container)).toContain('second-new')
   })
   expect(screen.queryByRole('button', { name: /jump to latest/i })).not.toBeInTheDocument()
 })
@@ -253,7 +260,7 @@ test('drops a stale pin when the pinned request leaves the list', async () => {
   if (!putButton) throw new Error('expected a sidebar button for the PUT request')
   await user.click(putButton)
   await waitFor(() => {
-    expect(container.querySelector('pre.shiki')?.textContent).toContain('Ada Lovelace')
+    expect(getAllShikiText(container)).toContain('Ada Lovelace')
   })
 
   // Swap the cache to a list that no longer includes req_02. The stale-pin
@@ -264,9 +271,9 @@ test('drops a stale pin when the pinned request leaves the list', async () => {
   })
 
   await waitFor(() => {
-    expect(container.querySelector('pre.shiki')?.textContent).not.toContain('Ada Lovelace')
+    expect(getAllShikiText(container)).not.toContain('Ada Lovelace')
   })
-  expect(container.querySelector('pre.shiki')?.textContent).toContain('payment_intent.succeeded')
+  expect(getAllShikiText(container)).toContain('payment_intent.succeeded')
 })
 
 test('clicking delete on a sidebar entry removes it from the sidebar', async () => {
@@ -297,7 +304,7 @@ test('deleting the currently pinned request shows the next most recent in the de
   if (!putButton) throw new Error('expected a sidebar button for the PUT request')
   await user.click(putButton)
   await waitFor(() => {
-    expect(container.querySelector('pre.shiki')?.textContent).toContain('Ada Lovelace')
+    expect(getAllShikiText(container)).toContain('Ada Lovelace')
   })
 
   // Delete the pinned request via its delete button.
@@ -309,9 +316,9 @@ test('deleting the currently pinned request shows the next most recent in the de
 
   // The panel should fall back to the first remaining request (req_01).
   await waitFor(() => {
-    expect(container.querySelector('pre.shiki')?.textContent).toContain('payment_intent.succeeded')
+    expect(getAllShikiText(container)).toContain('payment_intent.succeeded')
   })
-  expect(container.querySelector('pre.shiki')?.textContent).not.toContain('Ada Lovelace')
+  expect(getAllShikiText(container)).not.toContain('Ada Lovelace')
 })
 
 test('"Clear all" empties the sidebar and shows empty state', async () => {

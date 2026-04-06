@@ -72,6 +72,8 @@ export function EndpointView() {
   const pinnedRequest = pinnedIndex >= 0 ? list[pinnedIndex] : undefined
   const displayedRequest = pinnedRequest ?? list[0] ?? null
   const displayedId = displayedRequest?.id ?? null
+  const displayedIndex = pinnedIndex >= 0 ? pinnedIndex : 0
+  const previousRequest = list[displayedIndex + 1] ?? null
 
   return (
     <>
@@ -88,7 +90,11 @@ export function EndpointView() {
           newCount={newCount}
           onJumpToLatest={handleJumpToLatest}
         />
-        <DetailPanel request={displayedRequest} />
+        <DetailPanel
+          key={displayedId}
+          request={displayedRequest}
+          previousRequest={previousRequest}
+        />
       </div>
       <ConnectionStatus status={wsStatus} />
     </>

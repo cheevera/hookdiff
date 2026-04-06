@@ -17,12 +17,21 @@ const BASE_REQUEST: WebhookRequest = {
   receivedAt: '2026-04-05T12:00:00.000Z',
 }
 
+const PREVIOUS_REQUEST: WebhookRequest = {
+  id: 'req_prev',
+  method: 'POST',
+  headers: {},
+  body: { marker: 'previous-body' },
+  queryParams: {},
+  receivedAt: '2026-04-05T11:55:00.000Z',
+}
+
 test('renders the empty state when request is null', () => {
   renderWithProviders(<DetailPanel request={null} />)
   expect(screen.getByText(/no request selected/i)).toBeInTheDocument()
 })
 
-test('renders the method badge and body when a request is provided', async () => {
+test('renders the method badge and body when a request is provided (no predecessor)', async () => {
   const { container } = renderWithProviders(<DetailPanel request={BASE_REQUEST} />)
   expect(screen.getByText('POST')).toBeInTheDocument()
   await waitFor(() => {
@@ -74,14 +83,14 @@ test('clicking query params toggle expands and shows param key-value pairs', asy
   expect(screen.getByText('1')).toBeInTheDocument()
 })
 
-test('"Detail" button is present and visually active', () => {
+test('"Detail" button is present and enabled', () => {
   renderWithProviders(<DetailPanel request={BASE_REQUEST} />)
   const detailButton = screen.getByRole('button', { name: 'Detail' })
   expect(detailButton).toBeInTheDocument()
   expect(detailButton).toBeEnabled()
 })
 
-test('"Diff" button is present and disabled', () => {
+test('"Diff" button is disabled when no previousRequest', () => {
   renderWithProviders(<DetailPanel request={BASE_REQUEST} />)
   const diffButton = screen.getByRole('button', { name: 'Diff' })
   expect(diffButton).toBeInTheDocument()
@@ -100,4 +109,40 @@ test('headers section is hidden when headers is empty', () => {
   const request: WebhookRequest = { ...BASE_REQUEST, headers: {} }
   renderWithProviders(<DetailPanel request={request} />)
   expect(screen.queryByText(/headers/i)).not.toBeInTheDocument()
+})
+
+test('"Diff" button is enabled when previousRequest is provided', () => {
+  renderWithProviders(<DetailPanel request={BASE_REQUEST} previousRequest={PREVIOUS_REQUEST} />)
+  const diffButton = screen.getByRole('button', { name: 'Diff' })
+  expect(diffButton).toBeEnabled()
+})
+
+test('defaults to diff view when previousRequest is provided', () => {
+  renderWithProviders(<DetailPanel request={BASE_REQUEST} previousRequest={PREVIOUS_REQUEST} />)
+  expect(screen.getByText('Previous')).toBeInTheDocument()
+  expect(screen.getByText('Current')).toBeInTheDocument()
+})
+
+test('clicking Detail toggles to detail view, clicking Diff toggles back', async () => {
+  const user = userEvent.setup()
+  renderWithProviders(<DetailPanel request={BASE_REQUEST} previousRequest={PREVIOUS_REQUEST} />)
+
+  // Starts in diff view
+  expect(screen.getByText('Previous')).toBeInTheDocument()
+
+  // Switch to detail
+  await user.click(screen.getByRole('button', { name: 'Detail' }))
+  expect(screen.queryByText('Previous')).not.toBeInTheDocument()
+  expect(screen.getByText('Body')).toBeInTheDocument()
+
+  // Switch back to diff
+  await user.click(screen.getByRole('button', { name: 'Diff' }))
+  expect(screen.getByText('Previous')).toBeInTheDocument()
+})
+
+test('forced to detail view when no predecessor even if view state is diff', () => {
+  renderWithProviders(<DetailPanel request={BASE_REQUEST} />)
+  // Should show detail content, not diff
+  expect(screen.queryByText('Previous')).not.toBeInTheDocument()
+  expect(screen.getByText('Body')).toBeInTheDocument()
 })
