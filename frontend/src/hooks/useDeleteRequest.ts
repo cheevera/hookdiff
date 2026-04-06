@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { deleteRequest } from '../lib/requests'
+import { toast } from 'sonner'
+import { deleteRequest } from '../lib/api'
 import type { WebhookRequest } from '../types/request'
 
 export function useDeleteRequest(slug: string | undefined) {
@@ -18,6 +19,7 @@ export function useDeleteRequest(slug: string | undefined) {
       if (context?.previous) {
         queryClient.setQueryData(['requests', slug], context.previous)
       }
+      toast.error('Failed to delete request')
     },
   })
 }

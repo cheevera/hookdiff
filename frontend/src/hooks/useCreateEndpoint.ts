@@ -1,5 +1,6 @@
 import { useMutation } from '@tanstack/react-query'
-import { createEndpoint, writeStoredSlug } from '../lib/endpoint'
+import { createEndpoint } from '../lib/api'
+import { writeStoredSlug } from '../lib/endpoint'
 
 export function useCreateEndpoint() {
   return useMutation({

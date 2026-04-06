@@ -1,5 +1,3 @@
-import type { Endpoint } from '../types/endpoint'
-
 export const ENDPOINT_STORAGE_KEY = 'hookdiff-endpoint-slug'
 
 export function readStoredSlug(): string | null {
@@ -24,12 +22,4 @@ export function clearStoredSlug(): void {
   } catch {
     // Swallow and no-op.
   }
-}
-
-export async function createEndpoint(): Promise<Endpoint> {
-  const response = await fetch('/api/endpoints/', { method: 'POST' })
-  if (!response.ok) {
-    throw new Error(`Failed to create endpoint: ${response.status}`)
-  }
-  return (await response.json()) as Endpoint
 }
