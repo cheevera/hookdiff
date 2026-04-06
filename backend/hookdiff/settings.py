@@ -3,12 +3,14 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Override via DJANGO_SECRET_KEY in production. The default is only safe for local dev.
 SECRET_KEY = os.environ.get(
     "DJANGO_SECRET_KEY", "dev-insecure-key-do-not-use-in-production"
 )
 
 DEBUG = os.environ.get("DJANGO_DEBUG", "0") == "1"
 
+# Permissive for local dev. Lock down to specific domains before any public deployment.
 ALLOWED_HOSTS = ["*"]
 
 INSTALLED_APPS = [
