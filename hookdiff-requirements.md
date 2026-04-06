@@ -36,11 +36,11 @@ At-a-glance status of every implementation unit. This list is the single source 
 - [x] Step 1.4 — Request list from MSW
 - [x] Step 1.5 — Real-time updates with a mock WebSocket
 - [x] Step 1.6 — Request deletion
-- [ ] Step 1.7 — Detail panel polish
+- [x] Step 1.7 — Detail panel polish
 
 ### Phase 2: Backend, connect frontend
 
-- [ ] Step 2.1 — Django project scaffold
+- [x] Step 2.1 — Django project scaffold
 - [ ] Step 2.2 — Data models and migrations
 - [ ] Step 2.3 — Endpoint creation API
 - [ ] Step 2.4 — Request listing API
@@ -170,13 +170,7 @@ Managed via `.env` file. A committed `.env.example` documents all required varia
 
 ### Current state
 
-The end-state architecture above describes a root `docker-compose.yml` orchestrating the frontend, a Django backend, Postgres, and Redis, shared between the devcontainer and a host workflow. That is still the target, but Phase 1 is frontend-only, so the repo is temporarily simpler:
-
-- There is no root `docker-compose.yml`. The only compose file is `.devcontainer/docker-compose.yml`.
-- The devcontainer uses its own minimal `.devcontainer/Dockerfile` instead of reusing `frontend/Dockerfile`, because the dev environment needs extra tools (git, make) that do not belong in the production frontend image.
-- The only supported way to run the project is "reopen in devcontainer, then `make dev`".
-
-When Step 2 adds the backend, compose will likely be promoted back to the root and the devcontainer pointed at it, matching the spec.
+The root `docker-compose.yml` orchestrates the app (Node + Python), Postgres, and Redis. The `.devcontainer/docker-compose.yml` is a thin override that adds `sleep infinity`, bind mounts, and the working directory. The devcontainer uses `.devcontainer/Dockerfile` which includes Node, pnpm, Python, and uv. The only supported way to run the project is "reopen in devcontainer, then `make dev`".
 
 ---
 
@@ -646,8 +640,7 @@ Subtle color coding for HTTP method badges:
 
 Short-term improvements that should happen soon but aren't blocking current work. Distinct from Future Considerations below, which are long-term product ideas.
 
-- **Promote compose back to the root.** See "Current state" under Development Environment. Triggers when Step 2 lands.
-- **Copy button UX.** Toast position (bottom-right) is not noticeable enough. Copy button should use `cursor: pointer`. Address during Step 1.7.
+- ~~**Promote compose back to the root.** See "Current state" under Development Environment. Triggers when Step 2 lands.~~ Done in Step 2.1.
 
 ---
 
