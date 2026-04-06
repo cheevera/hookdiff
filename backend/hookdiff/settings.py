@@ -12,7 +12,6 @@ DEBUG = os.environ.get("DJANGO_DEBUG", "0") == "1"
 ALLOWED_HOSTS = ["*"]
 
 INSTALLED_APPS = [
-    "daphne",
     "rest_framework",
     "channels",
     "endpoints",

@@ -13,7 +13,7 @@ help:
 	@echo "    make install      install frontend dependencies"
 	@echo ""
 	@echo "  Backend:"
-	@echo "    make dev-back      start Django dev server via Daphne on port 8000"
+	@echo "    make dev-back      start Django dev server via Uvicorn on port 8000"
 	@echo "    make test-back     run backend tests once"
 	@echo "    make coverage-back run backend tests with coverage gate"
 	@echo "    make check-back    run ruff lint + format check"
@@ -49,7 +49,7 @@ install:
 
 # Backend
 dev-back:
-	cd backend && uv run daphne -b 0.0.0.0 -p 8000 hookdiff.asgi:application
+	cd backend && uv run uvicorn hookdiff.asgi:application --host 0.0.0.0 --port 8000 --reload
 
 test-back:
 	cd backend && uv run pytest

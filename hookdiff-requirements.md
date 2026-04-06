@@ -82,7 +82,7 @@ At-a-glance status of every implementation unit. This list is the single source 
 | Layer | Technology | Notes |
 |---|---|---|
 | Framework | Django + Django REST Framework | |
-| ASGI Server | Daphne | Official Django Channels ASGI server |
+| ASGI Server | Uvicorn | Fast ASGI server with --reload support |
 | Database | PostgreSQL 16 (alpine image) | |
 | Real-time | Django Channels + Redis 7 | WebSocket pub/sub |
 | Dependency management | uv + pyproject.toml | Modern Python tooling, generates uv.lock |
@@ -154,7 +154,7 @@ The devcontainer references the same `docker-compose.yml` used for local develop
 
 | Service | Port | Notes |
 |---|---|---|
-| django | 8000 | Daphne ASGI server with hot reload |
+| django | 8000 | Uvicorn ASGI server with hot reload |
 | frontend | 5173 | Vite dev server with hot reload |
 | postgres | 5432 | postgres:16-alpine |
 | redis | 6379 | redis:7-alpine, used by Django Channels |
@@ -282,7 +282,7 @@ _Watch out for: the diff toggle placeholder should be visually present but clear
 Get a running Django project with all infrastructure connected but no application logic yet.
 
 - Initialise Django project with uv + pyproject.toml; configure Ruff and pytest in pyproject.toml
-- Install Django, DRF, Django Channels, daphne, psycopg2, and redis dependencies
+- Install Django, DRF, Django Channels, uvicorn, psycopg2, and redis dependencies
 - Configure Django to use PostgreSQL and Redis (via environment variables)
 - Add Docker Compose services: django, postgres, redis; configure devcontainer to start all three
 - Django starts and serves a 404 for all routes at this point; that is fine

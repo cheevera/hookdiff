@@ -25,7 +25,7 @@ Webhook debugging tools usually stop at "show me the request". When you're integ
 
 | Layer | Technology |
 |---|---|
-| Backend | Django + Django REST Framework, Daphne (ASGI), Django Channels, PostgreSQL 16, Redis 7 |
+| Backend | Django + Django REST Framework, Uvicorn (ASGI), Django Channels, PostgreSQL 16, Redis 7 |
 | Frontend | React 19 + TypeScript, Vite, Tailwind v4, React Router v7, TanStack React Query, Shiki, Sonner |
 | Testing | pytest + pytest-cov (backend), Vitest + Testing Library + MSW (frontend) |
 | Tooling | uv (Python), pnpm (Node), Ruff, Biome |
@@ -74,7 +74,7 @@ Run from the repo root inside the devcontainer:
 
 | Target | What it does |
 |---|---|
-| `make dev-back` | Start Django dev server via Daphne on port 8000 |
+| `make dev-back` | Start Django dev server via Uvicorn on port 8000 (with `--reload`) |
 | `make test-back` | Run the backend test suite once |
 | `make coverage-back` | Run the backend test suite with the 100% coverage gate |
 | `make check-back` | Run Ruff lint + format check (read-only) |
