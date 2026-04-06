@@ -33,6 +33,7 @@ omit = [
     "hookdiff/wsgi.py",
     "hookdiff/asgi.py",
     "tests/*",
+    "*/migrations/*",
 ]
 
 [tool.coverage.report]
@@ -41,6 +42,7 @@ fail_under = 100
 [tool.ruff]
 target-version = "py312"
 line-length = 88
+extend-exclude = ["*/migrations/*"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "N", "UP", "B", "SIM", "DJ"]

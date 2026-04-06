@@ -41,7 +41,7 @@ At-a-glance status of every implementation unit. This list is the single source 
 ### Phase 2: Backend, connect frontend
 
 - [x] Step 2.1 — Django project scaffold
-- [ ] Step 2.2 — Data models and migrations
+- [x] Step 2.2 — Data models and migrations
 - [ ] Step 2.3 — Endpoint creation API
 - [ ] Step 2.4 — Request listing API
 - [ ] Step 2.5 — Webhook receiver
