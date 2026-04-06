@@ -1,4 +1,5 @@
 import { screen, waitFor } from '@testing-library/react'
+import { expect, test } from 'vitest'
 import { App } from './App'
 import { MOCK_REQUESTS } from './mocks/fixtures'
 import { renderWithProviders } from './test/utils'

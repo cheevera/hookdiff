@@ -3,6 +3,7 @@
 // AFTER MSW's listen runs so that tests own `new WebSocket(...)`. Tests can
 // grab the created instances via `getTestWebSockets()` from `./webSocketMock`.
 import '@testing-library/jest-dom/vitest'
+import { cleanup } from '@testing-library/react'
 import { afterAll, afterEach, beforeAll } from 'vitest'
 import { server } from '../mocks/server'
 import { resetTestWebSockets, TestWebSocket } from './webSocketMock'
@@ -16,6 +17,7 @@ beforeAll(() => {
   })
 })
 afterEach(() => {
+  cleanup()
   server.resetHandlers()
   resetTestWebSockets()
 })
