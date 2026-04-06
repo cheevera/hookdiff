@@ -15,6 +15,7 @@ from endpoints.models import Endpoint, WebhookRequest
 from endpoints.serializers import EndpointSerializer, WebhookRequestSerializer
 
 MAX_SLUG_RETRIES = 10
+MAX_BODY_BYTES = 1_048_576  # 1 MB
 
 STRIPPED_HEADERS = {
     "x-forwarded-for",
@@ -83,6 +84,12 @@ class RequestDetail(generics.RetrieveDestroyAPIView):
 @require_http_methods(["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"])
 def receive_webhook(request, slug):
     endpoint = get_object_or_404(Endpoint, slug=slug)
+
+    if len(request.body) > MAX_BODY_BYTES:
+        return JsonResponse(
+            {"error": f"Request body exceeds {MAX_BODY_BYTES} byte limit"},
+            status=413,
+        )
 
     content_type = request.content_type or ""
     if "application/json" not in content_type:

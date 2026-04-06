@@ -109,6 +109,18 @@ def test_rejects_invalid_json_body(client, endpoint):
 
 
 @pytest.mark.django_db
+def test_rejects_oversized_body(client, endpoint):
+    large_body = json.dumps({"data": "x" * 1_048_577})
+    response = client.post(
+        f"/hooks/{endpoint.slug}/",
+        data=large_body,
+        content_type="application/json",
+    )
+    assert response.status_code == 413
+    assert WebhookRequest.objects.count() == 0
+
+
+@pytest.mark.django_db
 def test_404_for_unknown_slug(client):
     response = client.post(
         "/hooks/nonexistent/",
