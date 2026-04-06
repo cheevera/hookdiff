@@ -96,8 +96,8 @@ Run from the repo root inside the devcontainer:
 | Target | What it does |
 |---|---|
 | `make dev-front` | Start the Vite dev server on port 5173 |
-| `make test` | Run the frontend test suite once |
-| `make coverage` | Run the frontend test suite with the 100% coverage gate |
+| `make test-front` | Run the frontend test suite once |
+| `make coverage-front` | Run the frontend test suite with the 100% coverage gate |
 | `make build` | Type-check and produce a production build |
 | `make check-front` | Run Biome lint + format check (read-only) |
 | `make format-front` | Auto-fix Biome lint + format issues |
@@ -119,6 +119,8 @@ Run from the repo root inside the devcontainer:
 | Target | What it does |
 |---|---|
 | `make dev` | Start frontend + backend concurrently |
+| `make test` | Run all tests |
+| `make coverage` | Run all tests with the 100% coverage gate |
 | `make check` | Run both Biome + Ruff checks |
 | `make format` | Run both Biome + Ruff fixes |
 

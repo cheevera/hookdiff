@@ -28,7 +28,7 @@ jobs:
         run: pnpm --dir frontend install --frozen-lockfile
 
       - run: make check-front
-      - run: make coverage
+      - run: make coverage-front
       - run: make build
 
   backend:
