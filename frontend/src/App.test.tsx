@@ -5,7 +5,7 @@ import { MOCK_REQUESTS } from './mocks/fixtures'
 import { renderWithProviders } from './test/utils'
 
 const TEST_SLUG = 'a3f9bc2d'
-const TEST_URL = `http://localhost:8000/hooks/${TEST_SLUG}/`
+const TEST_URL = `http://localhost:5173/hooks/${TEST_SLUG}/`
 
 async function waitForShiki(container: HTMLElement) {
   await waitFor(() => {

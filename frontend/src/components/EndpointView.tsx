@@ -6,6 +6,7 @@ import { useDeleteRequest } from '../hooks/useDeleteRequest'
 import { useRequests } from '../hooks/useRequests'
 import { useWebSocket } from '../hooks/useWebSocket'
 import { clearStoredSlug, writeStoredSlug } from '../lib/endpoint'
+import { getWebhookUrl } from '../lib/env'
 import { ConnectionStatus } from './ConnectionStatus'
 import { DetailPanel } from './DetailPanel'
 import { Header } from './Header'
@@ -45,7 +46,7 @@ export function EndpointView() {
     return null
   }
 
-  const url = `http://localhost:8000/hooks/${slug}/`
+  const url = getWebhookUrl(slug)
 
   const handleNewEndpoint = () => {
     clearStoredSlug()

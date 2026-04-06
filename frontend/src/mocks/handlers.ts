@@ -10,7 +10,7 @@ export const handlers: HttpHandler[] = [
     const slug = generateSlug()
     return HttpResponse.json({
       slug,
-      url: `http://localhost:8000/hooks/${slug}/`,
+      url: `/hooks/${slug}/`,
       createdAt: new Date().toISOString(),
     })
   }),

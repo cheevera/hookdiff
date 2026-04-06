@@ -1,5 +1,6 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
+import { getWebSocketUrl } from '../lib/env'
 import type { WebhookRequest } from '../types/request'
 
 type WebSocketStatus = 'connecting' | 'open' | 'closed'
@@ -15,7 +16,7 @@ export function useWebSocket(slug: string | undefined) {
 
   useEffect(() => {
     if (!slug) return
-    const socket = new WebSocket(`ws://localhost:8000/ws/endpoints/${slug}/`)
+    const socket = new WebSocket(getWebSocketUrl(slug))
 
     const handleOpen = () => setStatus('open')
     const handleClose = () => setStatus('closed')

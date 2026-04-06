@@ -9,14 +9,14 @@ test('createEndpoint returns the parsed endpoint on success', async () => {
     http.post('/api/endpoints/', () =>
       HttpResponse.json({
         slug: 'okslug01',
-        url: 'http://localhost:8000/hooks/okslug01/',
+        url: 'http://localhost:5173/hooks/okslug01/',
         createdAt: '2026-04-05T00:00:00.000Z',
       }),
     ),
   )
   const endpoint = await createEndpoint()
   expect(endpoint.slug).toBe('okslug01')
-  expect(endpoint.url).toBe('http://localhost:8000/hooks/okslug01/')
+  expect(endpoint.url).toBe('http://localhost:5173/hooks/okslug01/')
   expect(endpoint.createdAt).toBe('2026-04-05T00:00:00.000Z')
 })
 

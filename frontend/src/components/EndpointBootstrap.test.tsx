@@ -23,7 +23,7 @@ test('creates a new endpoint and navigates to its slug when localStorage is empt
       callCount += 1
       return HttpResponse.json({
         slug: 'newslug1',
-        url: 'http://localhost:8000/hooks/newslug1/',
+        url: 'http://localhost:5173/hooks/newslug1/',
         createdAt: '2026-04-05T00:00:00.000Z',
       })
     }),
@@ -32,7 +32,7 @@ test('creates a new endpoint and navigates to its slug when localStorage is empt
   renderWithProviders(<App />, { initialEntries: ['/'] })
 
   await waitFor(() => {
-    expect(screen.getByText('http://localhost:8000/hooks/newslug1/')).toBeInTheDocument()
+    expect(screen.getByText('http://localhost:5173/hooks/newslug1/')).toBeInTheDocument()
   })
   expect(localStorage.getItem(ENDPOINT_STORAGE_KEY)).toBe('newslug1')
   expect(callCount).toBe(1)
@@ -45,7 +45,7 @@ test('redirects to the stored slug without hitting the API when localStorage has
       callCount += 1
       return HttpResponse.json({
         slug: 'shouldnothappen',
-        url: 'http://localhost:8000/hooks/shouldnothappen/',
+        url: 'http://localhost:5173/hooks/shouldnothappen/',
         createdAt: '2026-04-05T00:00:00.000Z',
       })
     }),
@@ -55,7 +55,7 @@ test('redirects to the stored slug without hitting the API when localStorage has
   renderWithProviders(<App />, { initialEntries: ['/'] })
 
   await waitFor(() => {
-    expect(screen.getByText('http://localhost:8000/hooks/existing1/')).toBeInTheDocument()
+    expect(screen.getByText('http://localhost:5173/hooks/existing1/')).toBeInTheDocument()
   })
   expect(callCount).toBe(0)
 })
@@ -73,7 +73,7 @@ test('shows an error state with retry when creation fails, then succeeds on retr
       }
       return HttpResponse.json({
         slug: 'retry01x',
-        url: 'http://localhost:8000/hooks/retry01x/',
+        url: 'http://localhost:5173/hooks/retry01x/',
         createdAt: '2026-04-05T00:00:00.000Z',
       })
     }),
@@ -88,7 +88,7 @@ test('shows an error state with retry when creation fails, then succeeds on retr
   await user.click(retryButton)
 
   await waitFor(() => {
-    expect(screen.getByText('http://localhost:8000/hooks/retry01x/')).toBeInTheDocument()
+    expect(screen.getByText('http://localhost:5173/hooks/retry01x/')).toBeInTheDocument()
   })
   expect(attempt).toBe(2)
 })
@@ -103,7 +103,7 @@ test('shows a loading state while the mutation is in flight', async () => {
       await waitForMe
       return HttpResponse.json({
         slug: 'delayed1',
-        url: 'http://localhost:8000/hooks/delayed1/',
+        url: 'http://localhost:5173/hooks/delayed1/',
         createdAt: '2026-04-05T00:00:00.000Z',
       })
     }),
@@ -118,5 +118,5 @@ test('shows a loading state while the mutation is in flight', async () => {
   await waitFor(() => {
     expect(screen.queryByText(/Creating endpoint/i)).not.toBeInTheDocument()
   })
-  expect(screen.getByText('http://localhost:8000/hooks/delayed1/')).toBeInTheDocument()
+  expect(screen.getByText('http://localhost:5173/hooks/delayed1/')).toBeInTheDocument()
 })

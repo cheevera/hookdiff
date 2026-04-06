@@ -37,7 +37,7 @@ test('clicking New Endpoint creates a new endpoint, updates localStorage, and na
     http.post('/api/endpoints/', () =>
       HttpResponse.json({
         slug: 'freshnew',
-        url: 'http://localhost:8000/hooks/freshnew/',
+        url: 'http://localhost:5173/hooks/freshnew/',
         createdAt: '2026-04-05T00:00:00.000Z',
       }),
     ),
@@ -47,14 +47,14 @@ test('clicking New Endpoint creates a new endpoint, updates localStorage, and na
   renderWithProviders(<App />, { initialEntries: ['/oldslug1'] })
 
   // Starts on the old slug.
-  expect(screen.getByText('http://localhost:8000/hooks/oldslug1/')).toBeInTheDocument()
+  expect(screen.getByText('http://localhost:5173/hooks/oldslug1/')).toBeInTheDocument()
 
   await user.click(screen.getByRole('button', { name: /new endpoint/i }))
 
   await waitFor(() => {
-    expect(screen.getByText('http://localhost:8000/hooks/freshnew/')).toBeInTheDocument()
+    expect(screen.getByText('http://localhost:5173/hooks/freshnew/')).toBeInTheDocument()
   })
-  expect(screen.queryByText('http://localhost:8000/hooks/oldslug1/')).not.toBeInTheDocument()
+  expect(screen.queryByText('http://localhost:5173/hooks/oldslug1/')).not.toBeInTheDocument()
   await waitFor(() => {
     expect(localStorage.getItem(ENDPOINT_STORAGE_KEY)).toBe('freshnew')
   })

@@ -12,10 +12,14 @@ export default defineConfig({
     proxy: {
       '/api': 'http://localhost:8000',
       '/hooks': 'http://localhost:8000',
+      '/ws': { target: 'http://localhost:8000', ws: true },
     },
   },
   test: {
     environment: 'jsdom',
+    environmentOptions: {
+      jsdom: { url: 'http://localhost:5173' },
+    },
     setupFiles: './src/test/setup.ts',
     css: true,
     coverage: {
