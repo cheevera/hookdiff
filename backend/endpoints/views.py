@@ -3,7 +3,7 @@ import secrets
 
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
-from django.db import IntegrityError
+from django.db import IntegrityError, transaction
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
@@ -46,7 +46,8 @@ class EndpointCreate(generics.CreateAPIView):
         for _ in range(MAX_SLUG_RETRIES):
             slug = generate_slug()
             try:
-                endpoint = Endpoint.objects.create(slug=slug)
+                with transaction.atomic():
+                    endpoint = Endpoint.objects.create(slug=slug)
             except IntegrityError:
                 continue
             serializer = self.get_serializer(endpoint)

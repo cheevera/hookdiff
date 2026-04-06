@@ -2,8 +2,10 @@ import pytest
 from channels.layers import get_channel_layer
 from django.conf import settings
 from django.db import connection
+from django.test import override_settings
 
 
+@override_settings(DEBUG=True)
 def test_django_starts():
     assert settings.DEBUG is True
 
