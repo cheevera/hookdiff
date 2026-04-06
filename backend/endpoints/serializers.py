@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from endpoints.models import Endpoint
+from endpoints.models import Endpoint, WebhookRequest
 
 
 class EndpointSerializer(serializers.ModelSerializer):
@@ -21,4 +21,19 @@ class EndpointSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         data = super().to_representation(instance)
         data["createdAt"] = data.pop("created_at")
+        return data
+
+
+class WebhookRequestSerializer(serializers.ModelSerializer):
+    received_at = serializers.DateTimeField(read_only=True)
+    query_params = serializers.JSONField()
+
+    class Meta:
+        model = WebhookRequest
+        fields = ["id", "method", "headers", "body", "query_params", "received_at"]
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data["receivedAt"] = data.pop("received_at")
+        data["queryParams"] = data.pop("query_params")
         return data
