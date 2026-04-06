@@ -62,8 +62,13 @@ class RequestList(generics.ListAPIView):
         endpoint = get_object_or_404(Endpoint, slug=self.kwargs["slug"])
         return endpoint.requests.all()
 
+    def delete(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        queryset.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
-class RequestDetail(generics.RetrieveAPIView):
+
+class RequestDetail(generics.RetrieveDestroyAPIView):
     serializer_class = WebhookRequestSerializer
     lookup_url_kwarg = "request_id"
 

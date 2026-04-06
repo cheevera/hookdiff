@@ -45,7 +45,7 @@ At-a-glance status of every implementation unit. This list is the single source 
 - [x] Step 2.3 — Endpoint creation API
 - [x] Step 2.4 — Request listing API
 - [x] Step 2.5 — Webhook receiver
-- [ ] Step 2.6 — Request deletion API
+- [x] Step 2.6 — Request deletion API
 - [ ] Step 2.7 — WebSocket consumer
 
 ### Phase 3: Diff feature
