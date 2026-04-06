@@ -91,6 +91,16 @@ The devcontainer is the only supported entry point today. Running the project di
 
 Run from the repo root inside the devcontainer:
 
+### Combined
+
+| Target | What it does |
+|---|---|
+| `make dev` | Start frontend + backend concurrently |
+| `make test` | Run all tests |
+| `make coverage` | Run all tests with the 100% coverage gate |
+| `make check` | Run both Biome + Ruff checks |
+| `make format` | Run both Biome + Ruff fixes |
+
 ### Frontend
 
 | Target | What it does |
@@ -113,16 +123,6 @@ Run from the repo root inside the devcontainer:
 | `make check-back` | Run Ruff lint + format check (read-only) |
 | `make format-back` | Auto-fix Ruff lint + format issues |
 | `make migrate` | Run Django migrations |
-
-### Combined
-
-| Target | What it does |
-|---|---|
-| `make dev` | Start frontend + backend concurrently |
-| `make test` | Run all tests |
-| `make coverage` | Run all tests with the 100% coverage gate |
-| `make check` | Run both Biome + Ruff checks |
-| `make format` | Run both Biome + Ruff fixes |
 
 Running `make` with no target prints this list.
 
