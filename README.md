@@ -95,4 +95,4 @@ Running `make` with no target prints this list.
 
 ## Status
 
-**Work in progress.** Phase 1 (frontend on mocked APIs) is complete through Step 1.7. Phase 2 (Django backend) is in progress: Step 2.1 (project scaffold with PostgreSQL and Redis) is done. Steps 2.2 through 2.7 (data models, REST APIs, webhook receiver, WebSocket consumer) and Phase 3 (JSON diff view) are still ahead. See `hookdiff-requirements.md` for the full spec and the Progress checklist at the top for exact implementation status.
+**Work in progress.** Phase 1 (frontend on mocked APIs) and Phase 2 (Django backend) are complete. The backend serves REST APIs for endpoint creation, request listing, request deletion, and webhook ingestion, plus a WebSocket consumer for real-time updates. Phase 3 (JSON diff view) is still ahead. See `hookdiff-requirements.md` for the full spec and the Progress checklist at the top for exact implementation status.
