@@ -21,6 +21,7 @@ dev = [
     "pytest-cov>=6.0",
     "ruff>=0.8",
     "debugpy>=1.8",
+    "daphne>=4.1",
 ]
 
 [tool.pytest.ini_options]
