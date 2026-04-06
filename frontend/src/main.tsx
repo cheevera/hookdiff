@@ -14,25 +14,16 @@ function AppToaster() {
   return <Toaster richColors position="top-center" theme={theme} />
 }
 
-async function startApp() {
-  const rootElement = document.getElementById('root')
-  if (!rootElement) throw new Error('Root element #root not found')
+const rootElement = document.getElementById('root')
+if (!rootElement) throw new Error('Root element #root not found')
 
-  if (import.meta.env.DEV) {
-    const { worker } = await import('./mocks/browser')
-    await worker.start({ onUnhandledRequest: 'bypass' })
-  }
-
-  createRoot(rootElement).render(
-    <StrictMode>
-      <QueryClientProvider client={queryClient}>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-        <AppToaster />
-      </QueryClientProvider>
-    </StrictMode>,
-  )
-}
-
-startApp()
+createRoot(rootElement).render(
+  <StrictMode>
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+      <AppToaster />
+    </QueryClientProvider>
+  </StrictMode>,
+)
