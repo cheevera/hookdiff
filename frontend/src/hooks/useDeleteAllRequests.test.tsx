@@ -2,7 +2,8 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { act, renderHook, waitFor } from '@testing-library/react'
 import { HttpResponse, http } from 'msw'
 import type { ReactNode } from 'react'
-import { expect, test } from 'vitest'
+import { toast } from 'sonner'
+import { expect, test, vi } from 'vitest'
 import { server } from '../mocks/server'
 import type { WebhookRequest } from '../types/request'
 import { useDeleteAllRequests } from './useDeleteAllRequests'
@@ -56,7 +57,8 @@ test('optimistically clears all requests from the cache', async () => {
   expect(cached).toEqual([])
 })
 
-test('rolls back the cache on server error', async () => {
+test('rolls back the cache and shows error toast on server error', async () => {
+  const toastError = vi.spyOn(toast, 'error')
   server.use(
     http.delete('/api/endpoints/:slug/requests/', () => new HttpResponse(null, { status: 500 })),
   )
@@ -78,4 +80,5 @@ test('rolls back the cache on server error', async () => {
 
   const cached = queryClient.getQueryData<WebhookRequest[]>(['requests', 'testslug'])
   expect(cached).toEqual(requests)
+  expect(toastError).toHaveBeenCalledWith('Failed to delete requests')
 })
