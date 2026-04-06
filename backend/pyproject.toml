@@ -9,7 +9,6 @@ dependencies = [
     "uvicorn[standard]>=0.30",
     "channels-redis>=4.2",
     "psycopg2-binary>=2.9",
-    "redis>=5.2",
     "tzdata>=2024.1",
 ]
 
