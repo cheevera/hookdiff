@@ -1,6 +1,6 @@
 # hookdiff
 
-> **Work in progress.** Request capture, real-time streaming, and the full REST API are functional. JSON diff view (the core differentiator) is not yet implemented. See the Status section at the bottom for details.
+> **Work in progress.** The v1 feature set is functional (request capture, real-time streaming, JSON diff view). Not yet deployed or hardened for public use.
 
 A local developer tool for capturing, inspecting, and diffing incoming webhook requests. Inspired by webhook.site, with a core differentiator: structured JSON diff and field-level value tracking across multiple captured requests.
 
@@ -10,14 +10,14 @@ The initial version is scoped for personal local use. The architecture is design
 
 Webhook debugging tools usually stop at "show me the request". When you're integrating with a provider whose payloads change over time (Stripe, GitHub, a partner API), the interesting question is rarely "what did this request look like?" and almost always "what changed between this request and the last one?". hookdiff makes that the primary view.
 
-## Planned Features (v1)
+## Features
 
 - **Ephemeral local endpoints.** Spin up a random webhook URL on load, persisted in localStorage. One endpoint at a time, no auth.
 - **Request capture.** Accepts any HTTP method at `/hooks/{slug}/`. Stores method, headers, parsed JSON body, query params, and timestamp. Non-JSON bodies are rejected with `400`.
 - **Header filtering.** Proxy and infrastructure headers (`X-Forwarded-*`, `X-Real-IP`, `X-Amzn-*`, `CF-*`) are stripped before storage so only headers the sender set are shown.
 - **Real-time request list.** Requests stream into the sidebar over a WebSocket with no polling. Pinning a request prevents auto-switching when new ones arrive.
 - **Syntax-highlighted detail view.** Pretty-printed JSON body via Shiki, with collapsible headers and query params sections.
-- **JSON diff view.** For every request after the first, a two-column diff view highlights changed, added, and removed fields with dot-notation paths (e.g. `data.object.amount`). Arrays are treated as atomic values in v1.
+- **JSON diff view.** For every request after the first, a two-column diff view highlights changed, added, and removed fields with dot-notation paths (e.g. `data.object.amount`). Arrays are treated as atomic values.
 - **Request deletion.** Delete individual requests inline or clear all with a confirm dialog.
 - **Light and dark mode.** Follows system preference, overridable via a toggle. Shiki theme switches to match.
 
@@ -93,4 +93,4 @@ Running `make` with no target prints this list.
 
 ## Status
 
-**Work in progress.** Phase 1 (frontend on mocked APIs) and Phase 2 (Django backend) are complete. The backend serves REST APIs for endpoint creation, request listing, request deletion, and webhook ingestion, plus a WebSocket consumer for real-time updates. Phase 3 (JSON diff view) is still ahead. See `hookdiff-requirements.md` for the full spec and the Progress checklist at the top for exact implementation status.
+The v1 feature set is complete. All three phases are implemented: frontend with mocked APIs, Django backend with real-time WebSocket delivery, and the JSON diff view. Both frontend and backend maintain 100% test coverage. See `hookdiff-requirements.md` for the full spec.
