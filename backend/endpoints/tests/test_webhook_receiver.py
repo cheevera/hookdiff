@@ -1,5 +1,5 @@
 import json
-from unittest.mock import patch
+from unittest.mock import AsyncMock, patch
 
 import pytest
 
@@ -64,10 +64,11 @@ def test_valid_json_delete(client, endpoint):
 
 @pytest.mark.django_db
 def test_valid_json_get(client, endpoint):
-    response = client.get(
+    response = client.generic(
+        "GET",
         f"/hooks/{endpoint.slug}/",
-        content_type="application/json",
         data=json.dumps({}),
+        content_type="application/json",
     )
     assert response.status_code == 200
     req = WebhookRequest.objects.first()
@@ -90,6 +91,7 @@ def test_rejects_missing_content_type(client, endpoint):
     response = client.post(
         f"/hooks/{endpoint.slug}/",
         data="not json",
+        content_type="text/plain",
     )
     assert response.status_code == 400
     assert WebhookRequest.objects.count() == 0
@@ -171,8 +173,8 @@ def test_stores_query_params(client, endpoint):
 @pytest.mark.django_db
 def test_publishes_to_channel_layer(client, endpoint):
     with patch("endpoints.views.get_channel_layer") as mock_layer:
-        mock_send = mock_layer.return_value.group_send
-        mock_send.return_value = None
+        mock_send = AsyncMock()
+        mock_layer.return_value.group_send = mock_send
         response = client.post(
             f"/hooks/{endpoint.slug}/",
             data=json.dumps({"notify": True}),

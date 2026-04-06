@@ -103,7 +103,7 @@ def receive_webhook(request, slug):
         method=request.method,
         headers=filtered_headers,
         body=body,
-        query_params=dict(request.GET),
+        query_params=request.GET.dict(),
     )
 
     channel_layer = get_channel_layer()

@@ -3,7 +3,7 @@ name = "hookdiff"
 version = "0.1.0"
 requires-python = ">=3.12"
 dependencies = [
-    "django>=5.1",
+    "django>=5.1,<7",
     "djangorestframework>=3.15",
     "channels>=4.2",
     "daphne>=4.1",
@@ -19,6 +19,7 @@ dev = [
     "pytest-django>=4.9",
     "pytest-cov>=6.0",
     "ruff>=0.8",
+    "debugpy>=1.8",
 ]
 
 [tool.pytest.ini_options]
