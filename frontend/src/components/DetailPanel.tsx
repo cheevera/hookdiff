@@ -37,7 +37,7 @@ export function DetailPanel({
 
   if (!request) {
     return (
-      <section className="flex-1 p-6 text-sm text-gray-500 dark:text-gray-400">
+      <section className="flex-1 bg-white p-6 text-sm text-gray-500 dark:bg-gray-950 dark:text-gray-400">
         No request selected
       </section>
     )
