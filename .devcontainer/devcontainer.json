@@ -1,16 +1,17 @@
 {
   "name": "hookdiff",
-  "dockerComposeFile": "docker-compose.yml",
-  "service": "frontend",
+  "dockerComposeFile": ["../docker-compose.yml", "docker-compose.yml"],
+  "service": "app",
   "workspaceFolder": "/workspaces/hookdiff",
-  "forwardPorts": [5173],
-  "postCreateCommand": "git config core.hooksPath .githooks && cd frontend && pnpm install",
+  "forwardPorts": [5173, 8000],
+  "postCreateCommand": "git config core.hooksPath .githooks && cd frontend && pnpm install && cd ../backend && uv sync",
   "customizations": {
     "vscode": {
       "extensions": [
         "biomejs.biome",
         "bradlc.vscode-tailwindcss",
-        "ms-azuretools.vscode-docker"
+        "ms-azuretools.vscode-docker",
+        "charliermarsh.ruff"
       ]
     }
   }
