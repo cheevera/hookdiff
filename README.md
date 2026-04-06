@@ -31,6 +31,39 @@ Webhook debugging tools usually stop at "show me the request". When you're integ
 | Tooling | uv (Python), pnpm (Node), Ruff, Biome |
 | Infra | Docker Compose, VS Code devcontainer |
 
+## Architecture
+
+```
+ External sender (curl, Stripe, etc.)
+           │
+           ▼
+   POST /hooks/{slug}/
+           │
+     ┌─────┴─────┐
+     │  Uvicorn   │  ← ASGI server
+     │  (Django)  │
+     └─────┬─────┘
+           │
+     ┌─────┴─────┐     ┌──────────┐
+     │ PostgreSQL │     │  Redis   │
+     │ (storage)  │     │ (pubsub) │
+     └────────────┘     └────┬─────┘
+                             │
+                     ┌───────┴────────┐
+                     │ Django Channels │
+                     │  (WebSocket)   │
+                     └───────┬────────┘
+                             │
+                             ▼
+                     React frontend
+                   (real-time updates)
+```
+
+1. An external service sends a webhook to `/hooks/{slug}/`.
+2. Django validates and stores the request in PostgreSQL, then publishes an event to Redis.
+3. Django Channels picks up the event and pushes it to connected WebSocket clients.
+4. The React frontend receives the event, updates the request list, and computes diffs client-side.
+
 ## Getting Started
 
 Prerequisites:
@@ -93,4 +126,4 @@ Running `make` with no target prints this list.
 
 ## Status
 
-The v1 feature set is complete. All three phases are implemented: frontend with mocked APIs, Django backend with real-time WebSocket delivery, and the JSON diff view. Both frontend and backend maintain 100% test coverage. See `hookdiff-requirements.md` for the full spec.
+The v1 feature set is complete. All three phases are implemented: frontend with mocked APIs, Django backend with real-time WebSocket delivery, and the JSON diff view. Both frontend and backend maintain 100% test coverage. See `DESIGN.md` for the full spec.
