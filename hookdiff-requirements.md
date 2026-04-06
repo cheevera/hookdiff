@@ -50,8 +50,8 @@ At-a-glance status of every implementation unit. This list is the single source 
 
 ### Phase 3: Diff feature
 
-- [ ] Step 3.1 — Diff algorithm
-- [ ] Step 3.2 — Diff view
+- [x] Step 3.1 — Diff algorithm
+- [x] Step 3.2 — Diff view
 
 ---
 
