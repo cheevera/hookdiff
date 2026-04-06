@@ -647,6 +647,7 @@ Subtle color coding for HTTP method badges:
 Short-term improvements that should happen soon but aren't blocking current work. Distinct from Future Considerations below, which are long-term product ideas.
 
 - **Promote compose back to the root.** See "Current state" under Development Environment. Triggers when Step 2 lands.
+- **Copy button UX.** Toast position (bottom-right) is not noticeable enough. Copy button should use `cursor: pointer`. Address during Step 1.7.
 
 ---
 
