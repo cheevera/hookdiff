@@ -2,6 +2,7 @@ import pytest
 from django.apps import apps
 
 from endpoints.models import Endpoint, WebhookRequest
+from endpoints.serializers import EndpointSerializer
 
 
 @pytest.mark.django_db
@@ -48,6 +49,13 @@ def test_ordering_is_reverse_chronological():
     requests = list(WebhookRequest.objects.all())
     assert requests[0].pk == r2.pk
     assert requests[1].pk == r1.pk
+
+
+@pytest.mark.django_db
+def test_endpoint_serializer_url_without_request_context():
+    endpoint = Endpoint.objects.create(slug="noreq123")
+    data = EndpointSerializer(endpoint).data
+    assert data["url"] == "/hooks/noreq123/"
 
 
 def test_compound_index_in_migration():

@@ -10,6 +10,7 @@ dependencies = [
     "channels-redis>=4.2",
     "psycopg2-binary>=2.9",
     "redis>=5.2",
+    "tzdata>=2024.1",
 ]
 
 [dependency-groups]
@@ -35,6 +36,7 @@ omit = [
     "hookdiff/asgi.py",
     "*/tests/*",
     "*/migrations/*",
+    "*/routing.py",
 ]
 
 [tool.coverage.report]
