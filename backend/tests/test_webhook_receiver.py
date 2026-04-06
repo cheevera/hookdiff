@@ -1,4 +1,5 @@
 import json
+from unittest.mock import patch
 
 import pytest
 
@@ -165,3 +166,23 @@ def test_stores_query_params(client, endpoint):
     req = WebhookRequest.objects.first()
     assert req.query_params["source"] == "test"
     assert req.query_params["debug"] == "1"
+
+
+@pytest.mark.django_db
+def test_publishes_to_channel_layer(client, endpoint):
+    with patch("endpoints.views.get_channel_layer") as mock_layer:
+        mock_send = mock_layer.return_value.group_send
+        mock_send.return_value = None
+        response = client.post(
+            f"/hooks/{endpoint.slug}/",
+            data=json.dumps({"notify": True}),
+            content_type="application/json",
+        )
+    assert response.status_code == 200
+    mock_send.assert_called_once()
+    call_args = mock_send.call_args
+    assert call_args[0][0] == f"endpoint_{endpoint.slug}"
+    message = call_args[0][1]
+    assert message["type"] == "request.received"
+    assert message["message"]["type"] == "request.received"
+    assert "request" in message["message"]

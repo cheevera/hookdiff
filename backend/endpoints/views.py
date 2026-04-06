@@ -1,6 +1,8 @@
 import json
 import secrets
 
+from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
 from django.db import IntegrityError
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
@@ -96,12 +98,24 @@ def receive_webhook(request, slug):
     raw_headers = {key: value for key, value in request.headers.items()}
     filtered_headers = filter_headers(raw_headers)
 
-    WebhookRequest.objects.create(
+    webhook_request = WebhookRequest.objects.create(
         endpoint=endpoint,
         method=request.method,
         headers=filtered_headers,
         body=body,
         query_params=dict(request.GET),
+    )
+
+    channel_layer = get_channel_layer()
+    async_to_sync(channel_layer.group_send)(
+        f"endpoint_{slug}",
+        {
+            "type": "request.received",
+            "message": {
+                "type": "request.received",
+                "request": WebhookRequestSerializer(webhook_request).data,
+            },
+        },
     )
 
     return JsonResponse({"success": True})
