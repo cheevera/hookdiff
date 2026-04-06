@@ -4,7 +4,7 @@
   "service": "app",
   "workspaceFolder": "/workspaces/hookdiff",
   "forwardPorts": [5173, 8000],
-  "postCreateCommand": "git config core.hooksPath .githooks && cd frontend && pnpm install && cd ../backend && uv sync",
+  "postCreateCommand": "git config core.hooksPath .githooks || true; cd frontend && pnpm install && cd ../backend && uv sync",
   "postStartCommand": "cd backend && uv run python manage.py migrate --noinput",
   "customizations": {
     "vscode": {
