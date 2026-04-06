@@ -75,7 +75,7 @@ export function EndpointView() {
 
   return (
     <>
-      <Header url={url} onNewEndpoint={handleNewEndpoint} />
+      <Header url={url} slug={slug} onNewEndpoint={handleNewEndpoint} />
       <div className="flex flex-1 overflow-hidden">
         <Sidebar
           requests={list}

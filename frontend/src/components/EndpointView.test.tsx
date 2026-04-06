@@ -328,6 +328,36 @@ test('"Clear all" empties the sidebar and shows empty state', async () => {
   expect(screen.getByText(/no request selected/i)).toBeInTheDocument()
 })
 
+test('Send test button shows pending state while request is in flight', async () => {
+  let resolveHook: (() => void) | null = null
+  server.use(
+    http.post(
+      '/hooks/:slug/',
+      () =>
+        new Promise<Response>((resolve) => {
+          resolveHook = () => resolve(HttpResponse.json({ success: true }))
+        }),
+    ),
+  )
+
+  const user = userEvent.setup()
+  renderWithProviders(<App />, { initialEntries: ['/testslg6'] })
+
+  const sendButton = await screen.findByRole('button', { name: /send test/i })
+  await user.click(sendButton)
+
+  await waitFor(() => {
+    expect(screen.getByRole('button', { name: /sending/i })).toBeInTheDocument()
+  })
+
+  if (!resolveHook) throw new Error('handler did not capture resolver')
+  ;(resolveHook as () => void)()
+
+  await waitFor(() => {
+    expect(screen.getByRole('button', { name: /send test/i })).toBeInTheDocument()
+  })
+})
+
 test('EndpointView renders nothing when the route has no slug param', () => {
   // Mount EndpointView on a route that does not define `:slug` so useParams()
   // returns undefined and the guard branch is exercised.

@@ -2,7 +2,7 @@ import { HttpResponse, http } from 'msw'
 import { expect, test } from 'vitest'
 import { server } from '../mocks/server'
 import type { WebhookRequest } from '../types/request'
-import { createEndpoint, fetchRequests } from './api'
+import { createEndpoint, fetchRequests, sendTestRequest } from './api'
 
 test('createEndpoint returns the parsed endpoint on success', async () => {
   server.use(
@@ -46,4 +46,14 @@ test('fetchRequests throws when the response is not ok', async () => {
     http.get('/api/endpoints/:slug/requests/', () => new HttpResponse(null, { status: 500 })),
   )
   await expect(fetchRequests('badslug1')).rejects.toThrow(/Failed to fetch requests: 500/)
+})
+
+test('sendTestRequest posts to the webhook endpoint', async () => {
+  server.use(http.post('/hooks/:slug/', () => HttpResponse.json({ success: true })))
+  await expect(sendTestRequest('myslug01')).resolves.toBeUndefined()
+})
+
+test('sendTestRequest throws when the response is not ok', async () => {
+  server.use(http.post('/hooks/:slug/', () => new HttpResponse(null, { status: 500 })))
+  await expect(sendTestRequest('badslug1')).rejects.toThrow(/Failed to send test request: 500/)
 })

@@ -26,3 +26,19 @@ export async function deleteAllRequests(slug: string): Promise<void> {
   const response = await fetch(`/api/endpoints/${slug}/requests/`, { method: 'DELETE' })
   if (!response.ok) throw new Error(`Failed to delete requests: ${response.status}`)
 }
+
+export async function sendTestRequest(slug: string): Promise<void> {
+  const response = await fetch(`/hooks/${slug}/`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      event: 'test.webhook',
+      timestamp: new Date().toISOString(),
+      data: {
+        id: crypto.randomUUID().slice(0, 8),
+        message: 'Test webhook from Hookdiff',
+      },
+    }),
+  })
+  if (!response.ok) throw new Error(`Failed to send test request: ${response.status}`)
+}
