@@ -1,0 +1,46 @@
+[project]
+name = "hookdiff"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+    "django>=5.1",
+    "djangorestframework>=3.15",
+    "channels>=4.2",
+    "daphne>=4.1",
+    "channels-redis>=4.2",
+    "psycopg2-binary>=2.9",
+    "redis>=5.2",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3",
+    "pytest-asyncio>=0.24",
+    "pytest-django>=4.9",
+    "pytest-cov>=6.0",
+    "ruff>=0.8",
+]
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "hookdiff.settings"
+pythonpath = ["."]
+asyncio_mode = "strict"
+
+[tool.coverage.run]
+source = ["."]
+omit = [
+    "manage.py",
+    "hookdiff/wsgi.py",
+    "hookdiff/asgi.py",
+    "tests/*",
+]
+
+[tool.coverage.report]
+fail_under = 100
+
+[tool.ruff]
+target-version = "py312"
+line-length = 88
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "UP", "B", "SIM", "DJ"]
