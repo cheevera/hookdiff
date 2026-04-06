@@ -163,9 +163,9 @@ The devcontainer references the same `docker-compose.yml` used for local develop
 
 Managed via `.env` file. A committed `.env.example` documents all required variables. No secrets are committed.
 
-### Linting
+### Pre-commit Hooks
 
-Ruff (lint + format) for Python, Biome (lint + format) for TypeScript/TSX/JSON/CSS. Enforced via `make check` and CI.
+A git pre-commit hook (`.githooks/pre-commit`) runs `make check` on every commit, which runs both Ruff (Python) and Biome (TypeScript/TSX/JSON/CSS). The devcontainer configures `core.hooksPath` automatically via `postCreateCommand`.
 
 ### Current state
 
