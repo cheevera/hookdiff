@@ -26,6 +26,7 @@ REST_FRAMEWORK = {
 }
 
 MIDDLEWARE = [
+    "hookdiff.middleware.RequestLoggingMiddleware",
     "django.middleware.common.CommonMiddleware",
 ]
 
@@ -68,11 +69,7 @@ LOGGING = {
         },
     },
     "loggers": {
-        "django.request": {
-            "handlers": ["console"],
-            "level": "INFO",
-        },
-        "django.server": {
+        "hookdiff.requests": {
             "handlers": ["console"],
             "level": "INFO",
         },
