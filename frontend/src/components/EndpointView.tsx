@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router'
 import { useCreateEndpoint } from '../hooks/useCreateEndpoint'
+import { useDeleteAllRequests } from '../hooks/useDeleteAllRequests'
+import { useDeleteRequest } from '../hooks/useDeleteRequest'
 import { useRequests } from '../hooks/useRequests'
 import { useWebSocket } from '../hooks/useWebSocket'
 import { clearStoredSlug, writeStoredSlug } from '../lib/endpoint'
@@ -14,6 +16,8 @@ export function EndpointView() {
   const navigate = useNavigate()
   const mutation = useCreateEndpoint()
   const { data: requests, isLoading, isError } = useRequests(slug)
+  const deleteMutation = useDeleteRequest(slug)
+  const deleteAllMutation = useDeleteAllRequests(slug)
   const list = requests ?? []
   const [pinnedId, setPinnedId] = useState<string | null>(null)
   // Snapshot of `list.length` at pin time so the "N new" badge counts only
@@ -60,6 +64,9 @@ export function EndpointView() {
     setPinnedAtLength(0)
   }
 
+  const handleDelete = (id: string) => deleteMutation.mutate(id)
+  const handleClearAll = () => deleteAllMutation.mutate()
+
   const pinnedIndex = pinnedId === null ? -1 : list.findIndex((r) => r.id === pinnedId)
   const newCount = pinnedId !== null ? Math.max(0, list.length - pinnedAtLength) : 0
   const pinnedRequest = pinnedIndex >= 0 ? list[pinnedIndex] : undefined
@@ -76,6 +83,8 @@ export function EndpointView() {
           isError={isError}
           selectedId={displayedId}
           onSelect={handlePin}
+          onDelete={handleDelete}
+          onClearAll={handleClearAll}
           newCount={newCount}
           onJumpToLatest={handleJumpToLatest}
         />

@@ -35,7 +35,7 @@ At-a-glance status of every implementation unit. This list is the single source 
 - [x] Step 1.3 — Endpoint creation flow with MSW
 - [x] Step 1.4 — Request list from MSW
 - [x] Step 1.5 — Real-time updates with a mock WebSocket
-- [ ] Step 1.6 — Request deletion
+- [x] Step 1.6 — Request deletion
 - [ ] Step 1.7 — Detail panel polish
 
 ### Phase 2: Backend, connect frontend

@@ -7,3 +7,13 @@ export async function fetchRequests(slug: string): Promise<WebhookRequest[]> {
   }
   return (await response.json()) as WebhookRequest[]
 }
+
+export async function deleteRequest(slug: string, id: string): Promise<void> {
+  const response = await fetch(`/api/endpoints/${slug}/requests/${id}/`, { method: 'DELETE' })
+  if (!response.ok) throw new Error(`Failed to delete request: ${response.status}`)
+}
+
+export async function deleteAllRequests(slug: string): Promise<void> {
+  const response = await fetch(`/api/endpoints/${slug}/requests/`, { method: 'DELETE' })
+  if (!response.ok) throw new Error(`Failed to delete requests: ${response.status}`)
+}

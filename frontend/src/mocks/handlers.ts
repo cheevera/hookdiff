@@ -15,4 +15,6 @@ export const handlers: HttpHandler[] = [
     })
   }),
   http.get('/api/endpoints/:slug/requests/', () => HttpResponse.json(MOCK_REQUESTS)),
+  http.delete('/api/endpoints/:slug/requests/:id/', () => new HttpResponse(null, { status: 204 })),
+  http.delete('/api/endpoints/:slug/requests/', () => new HttpResponse(null, { status: 204 })),
 ]

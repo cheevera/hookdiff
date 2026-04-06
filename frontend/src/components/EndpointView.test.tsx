@@ -269,6 +269,65 @@ test('drops a stale pin when the pinned request leaves the list', async () => {
   expect(container.querySelector('pre.shiki')?.textContent).toContain('payment_intent.succeeded')
 })
 
+test('clicking delete on a sidebar entry removes it from the sidebar', async () => {
+  const user = userEvent.setup()
+  renderWithProviders(<App />, { initialEntries: ['/delslug1'] })
+
+  await screen.findByText('3 requests')
+  const deleteButtons = screen.getAllByRole('button', { name: /delete request/i })
+  // Delete the first request (req_01, the Stripe payment_intent one).
+  await user.click(deleteButtons[0] as HTMLElement)
+
+  await waitFor(() => {
+    expect(screen.getByText('2 requests')).toBeInTheDocument()
+  })
+  expect(screen.queryByText('payment_intent.succeeded')).not.toBeInTheDocument()
+})
+
+test('deleting the currently pinned request shows the next most recent in the detail panel', async () => {
+  const user = userEvent.setup()
+  const { container } = renderWithProviders(<App />, { initialEntries: ['/delslug2'] })
+
+  await waitFor(() => {
+    expect(container.querySelector('pre.shiki')).not.toBeNull()
+  })
+  // Pin req_02 (the "918 / Ada Lovelace" request).
+  const buttons = screen.getAllByRole('button')
+  const putButton = buttons.find((b) => b.textContent?.includes('918'))
+  if (!putButton) throw new Error('expected a sidebar button for the PUT request')
+  await user.click(putButton)
+  await waitFor(() => {
+    expect(container.querySelector('pre.shiki')?.textContent).toContain('Ada Lovelace')
+  })
+
+  // Delete the pinned request via its delete button.
+  const deleteButtons = screen.getAllByRole('button', { name: /delete request/i })
+  // Find the delete button within the PUT item.
+  const putDeleteBtn = deleteButtons.find((btn) => btn.closest('[data-selected="true"]'))
+  if (!putDeleteBtn) throw new Error('expected a delete button on the selected item')
+  await user.click(putDeleteBtn)
+
+  // The panel should fall back to the first remaining request (req_01).
+  await waitFor(() => {
+    expect(container.querySelector('pre.shiki')?.textContent).toContain('payment_intent.succeeded')
+  })
+  expect(container.querySelector('pre.shiki')?.textContent).not.toContain('Ada Lovelace')
+})
+
+test('"Clear all" empties the sidebar and shows empty state', async () => {
+  const user = userEvent.setup()
+  vi.spyOn(window, 'confirm').mockReturnValue(true)
+  renderWithProviders(<App />, { initialEntries: ['/delslug3'] })
+
+  await screen.findByText('3 requests')
+  await user.click(screen.getByRole('button', { name: /clear all/i }))
+
+  await waitFor(() => {
+    expect(screen.getByText(/no requests yet/i)).toBeInTheDocument()
+  })
+  expect(screen.getByText(/no request selected/i)).toBeInTheDocument()
+})
+
 test('EndpointView renders nothing when the route has no slug param', () => {
   // Mount EndpointView on a route that does not define `:slug` so useParams()
   // returns undefined and the guard branch is exercised.

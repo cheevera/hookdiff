@@ -36,16 +36,25 @@ type SidebarItemProps = {
   request: WebhookRequest
   selected: boolean
   onSelect: () => void
+  onDelete: () => void
 }
 
-function SidebarItem({ request, selected, onSelect }: SidebarItemProps) {
+function SidebarItem({ request, selected, onSelect, onDelete }: SidebarItemProps) {
   return (
     <li className="border-b border-gray-200 dark:border-gray-800">
-      <button
-        type="button"
+      {/* biome-ignore lint/a11y/useSemanticElements: div with role=button avoids invalid nested button elements */}
+      <div
+        role="button"
+        tabIndex={0}
         onClick={onSelect}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault()
+            onSelect()
+          }
+        }}
         data-selected={selected}
-        className={`block w-full px-4 py-3 text-left ${
+        className={`relative block w-full px-4 py-3 text-left ${
           selected ? 'bg-gray-100 dark:bg-gray-800' : ''
         }`}
       >
@@ -58,7 +67,18 @@ function SidebarItem({ request, selected, onSelect }: SidebarItemProps) {
         <div className="mt-1 truncate font-mono text-xs text-gray-600 dark:text-gray-400">
           {bodyPreview(request.body)}
         </div>
-      </button>
+        <button
+          type="button"
+          aria-label="Delete request"
+          onClick={(e) => {
+            e.stopPropagation()
+            onDelete()
+          }}
+          className="absolute top-1 right-1 flex h-5 w-5 items-center justify-center rounded text-gray-400 hover:bg-gray-200 hover:text-gray-700 dark:hover:bg-gray-700 dark:hover:text-gray-200"
+        >
+          ×
+        </button>
+      </div>
     </li>
   )
 }
@@ -69,6 +89,8 @@ type SidebarProps = {
   isError: boolean
   selectedId: string | null
   onSelect: (id: string) => void
+  onDelete: (id: string) => void
+  onClearAll: () => void
   newCount: number
   onJumpToLatest: () => void
 }
@@ -82,6 +104,8 @@ export function Sidebar({
   isError,
   selectedId,
   onSelect,
+  onDelete,
+  onClearAll,
   newCount,
   onJumpToLatest,
 }: SidebarProps) {
@@ -112,6 +136,13 @@ export function Sidebar({
       </aside>
     )
   }
+
+  const handleClearAll = () => {
+    if (window.confirm('Delete all requests?')) {
+      onClearAll()
+    }
+  }
+
   return (
     <aside className={shellClass}>
       {newCount > 0 && (
@@ -128,9 +159,18 @@ export function Sidebar({
           </button>
         </div>
       )}
-      <div className="border-b border-gray-200 px-4 py-3 text-xs text-gray-600 dark:border-gray-800 dark:text-gray-400">
-        <div>{requests.length} requests</div>
-        <div>Last: {formatTime(latestReceivedAt(requests))}</div>
+      <div className="flex items-center justify-between border-b border-gray-200 px-4 py-3 text-xs text-gray-600 dark:border-gray-800 dark:text-gray-400">
+        <div>
+          <div>{requests.length} requests</div>
+          <div>Last: {formatTime(latestReceivedAt(requests))}</div>
+        </div>
+        <button
+          type="button"
+          onClick={handleClearAll}
+          className="text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
+        >
+          Clear all
+        </button>
       </div>
       <ul>
         {requests.map((request) => (
@@ -139,6 +179,7 @@ export function Sidebar({
             request={request}
             selected={request.id === selectedId}
             onSelect={() => onSelect(request.id)}
+            onDelete={() => onDelete(request.id)}
           />
         ))}
       </ul>
