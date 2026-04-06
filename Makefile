@@ -1,10 +1,10 @@
-.PHONY: help dev dev-back test test-back coverage coverage-back build check check-front check-back format format-front format-back install migrate
+.PHONY: help dev dev-front dev-back test test-back coverage coverage-back build check check-front check-back format format-front format-back install migrate
 
 help:
 	@echo "hookdiff — available make targets:"
 	@echo ""
 	@echo "  Frontend:"
-	@echo "    make dev          start the Vite dev server on port 5173"
+	@echo "    make dev-front    start the Vite dev server on port 5173"
 	@echo "    make test         run frontend tests once"
 	@echo "    make coverage     run frontend tests with coverage gate"
 	@echo "    make build        build the frontend for production"
@@ -21,11 +21,12 @@ help:
 	@echo "    make migrate       run Django migrations"
 	@echo ""
 	@echo "  Combined:"
+	@echo "    make dev           start frontend + backend concurrently"
 	@echo "    make check         run biome + ruff checks"
 	@echo "    make format        run biome + ruff fixes"
 
 # Frontend
-dev:
+dev-front:
 	pnpm --dir frontend dev
 
 test:
@@ -66,6 +67,9 @@ migrate:
 	cd backend && uv run python manage.py migrate
 
 # Combined
+dev:
+	pnpm --dir frontend exec concurrently --kill-others --names "front,back" --prefix-colors "cyan,magenta" "make dev-front" "make dev-back"
+
 check: check-front check-back
 
 format: format-front format-back
