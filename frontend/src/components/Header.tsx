@@ -1,16 +1,14 @@
-import { useSendTestRequest } from '../hooks/useSendTestRequest'
 import { CopyButton } from './CopyButton'
 import { ThemeToggle } from './ThemeToggle'
 
 type HeaderProps = {
   url: string
-  slug: string
   onNewEndpoint: () => void
+  onSendTest: () => void
+  isSendingTest: boolean
 }
 
-export function Header({ url, slug, onNewEndpoint }: HeaderProps) {
-  const sendTest = useSendTestRequest(slug)
-
+export function Header({ url, onNewEndpoint, onSendTest, isSendingTest }: HeaderProps) {
   return (
     <header className="flex items-center gap-3 border-b border-gray-200 bg-white px-4 py-3 dark:border-gray-800 dark:bg-gray-950">
       <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">Hookdiff</span>
@@ -25,11 +23,11 @@ export function Header({ url, slug, onNewEndpoint }: HeaderProps) {
       </button>
       <button
         type="button"
-        onClick={() => sendTest.mutate()}
-        disabled={sendTest.isPending}
+        onClick={onSendTest}
+        disabled={isSendingTest}
         className="rounded border border-gray-300 bg-white px-2 py-1 text-xs text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200 dark:hover:bg-gray-800 disabled:opacity-50"
       >
-        {sendTest.isPending ? 'Sending...' : 'Send test'}
+        {isSendingTest ? 'Sending...' : 'Send test'}
       </button>
       <div className="ml-auto">
         <ThemeToggle />

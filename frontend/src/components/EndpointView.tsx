@@ -4,6 +4,7 @@ import { useCreateEndpoint } from '../hooks/useCreateEndpoint'
 import { useDeleteAllRequests } from '../hooks/useDeleteAllRequests'
 import { useDeleteRequest } from '../hooks/useDeleteRequest'
 import { useRequests } from '../hooks/useRequests'
+import { useSendTestRequest } from '../hooks/useSendTestRequest'
 import { useWebSocket } from '../hooks/useWebSocket'
 import { clearStoredSlug, writeStoredSlug } from '../lib/endpoint'
 import { getWebhookUrl } from '../lib/env'
@@ -24,6 +25,7 @@ export function EndpointView() {
   // Snapshot of `list.length` at pin time so the "N new" badge counts only
   // requests that arrived after pinning, not pre-existing items above the pin.
   const [pinnedAtLength, setPinnedAtLength] = useState(0)
+  const sendTestMutation = useSendTestRequest(slug)
   const { status: wsStatus } = useWebSocket(slug)
 
   // Keep localStorage in sync with the currently viewed endpoint so reloads
@@ -65,6 +67,12 @@ export function EndpointView() {
     setPinnedAtLength(0)
   }
 
+  const handleSendTest = () => {
+    setPinnedId(null)
+    setPinnedAtLength(0)
+    sendTestMutation.mutate()
+  }
+
   const handleDelete = (id: string) => deleteMutation.mutate(id)
   const handleClearAll = () => deleteAllMutation.mutate()
 
@@ -78,7 +86,12 @@ export function EndpointView() {
 
   return (
     <>
-      <Header url={url} slug={slug} onNewEndpoint={handleNewEndpoint} />
+      <Header
+        url={url}
+        onNewEndpoint={handleNewEndpoint}
+        onSendTest={handleSendTest}
+        isSendingTest={sendTestMutation.isPending}
+      />
       <div className="flex flex-1 overflow-hidden">
         <Sidebar
           requests={list}
