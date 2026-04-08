@@ -46,7 +46,6 @@ async function dispatchMessage(socket: TestWebSocket, data: unknown): Promise<vo
 }
 
 test('does not create a socket when slug is undefined', () => {
-  // Force non-dev so the factory uses the global TestWebSocket stub.
   vi.spyOn(env, 'isDev').mockReturnValue(false)
   const queryClient = makeQueryClient()
   const { result } = renderHook(() => useWebSocket(undefined), {
@@ -114,15 +113,35 @@ test('ignores messages whose type is not request.received', async () => {
   ])
 })
 
+test('ignores messages that are not valid JSON', async () => {
+  vi.spyOn(env, 'isDev').mockReturnValue(false)
+  const queryClient = makeQueryClient()
+  queryClient.setQueryData(['requests', 'slug1'], [existingRequest])
+
+  renderHook(() => useWebSocket('slug1'), { wrapper: makeWrapper(queryClient) })
+
+  const socket = getTestWebSockets()[0]
+  if (!socket) throw new Error('expected a socket')
+  await act(async () => {
+    socket.dispatchEvent(new MessageEvent('message', { data: 'not-valid-json{{{' }))
+  })
+
+  expect(queryClient.getQueryData<WebhookRequest[]>(['requests', 'slug1'])).toEqual([
+    existingRequest,
+  ])
+})
+
 test('transitions to closed when a close event fires', async () => {
   vi.spyOn(env, 'isDev').mockReturnValue(false)
+  vi.useFakeTimers()
   const queryClient = makeQueryClient()
   const { result } = renderHook(() => useWebSocket('slug1'), {
     wrapper: makeWrapper(queryClient),
   })
-  await waitFor(() => {
-    expect(result.current.status).toBe('open')
+  await act(async () => {
+    await vi.advanceTimersByTimeAsync(0)
   })
+  expect(result.current.status).toBe('open')
 
   const socket = getTestWebSockets()[0]
   if (!socket) throw new Error('expected a socket')
@@ -131,6 +150,7 @@ test('transitions to closed when a close event fires', async () => {
   })
 
   expect(result.current.status).toBe('closed')
+  vi.useRealTimers()
 })
 
 test('closes the socket on unmount', () => {
@@ -142,4 +162,146 @@ test('closes the socket on unmount', () => {
   })
   unmount()
   expect(closeSpy).toHaveBeenCalled()
+})
+
+test('reconnects after an unexpected close', async () => {
+  vi.useFakeTimers()
+  vi.spyOn(env, 'isDev').mockReturnValue(false)
+  const queryClient = makeQueryClient()
+
+  const { result } = renderHook(() => useWebSocket('slug1'), {
+    wrapper: makeWrapper(queryClient),
+  })
+
+  await act(async () => {
+    await vi.advanceTimersByTimeAsync(0)
+  })
+  expect(result.current.status).toBe('open')
+
+  const socket1 = getTestWebSockets()[0]
+  if (!socket1) throw new Error('expected a socket')
+  await act(async () => {
+    socket1.dispatchEvent(new Event('close'))
+  })
+  expect(result.current.status).toBe('closed')
+
+  // Advance past max possible first reconnect delay and let open fire
+  await act(async () => {
+    await vi.advanceTimersByTimeAsync(1000)
+    await vi.advanceTimersByTimeAsync(0)
+  })
+
+  expect(getTestWebSockets().length).toBe(2)
+  expect(result.current.status).toBe('open')
+
+  vi.useRealTimers()
+})
+
+test('backoff delay increases with consecutive failures', async () => {
+  vi.useFakeTimers()
+  vi.spyOn(env, 'isDev').mockReturnValue(false)
+  vi.spyOn(Math, 'random').mockReturnValue(1)
+  const queryClient = makeQueryClient()
+
+  renderHook(() => useWebSocket('slug1'), {
+    wrapper: makeWrapper(queryClient),
+  })
+
+  await act(async () => {
+    await vi.advanceTimersByTimeAsync(0)
+  })
+
+  // Close first socket: attempt 0, delay = 1 * 1000 * 2^0 = 1000ms
+  const socket1 = getTestWebSockets()[0]
+  if (!socket1) throw new Error('expected a socket')
+  await act(async () => {
+    socket1.dispatchEvent(new Event('close'))
+  })
+
+  await act(async () => {
+    await vi.advanceTimersByTimeAsync(999)
+  })
+  expect(getTestWebSockets().length).toBe(1)
+
+  // Fire reconnect timer synchronously so the new socket's open microtask
+  // hasn't run yet, keeping the attempt counter at 1.
+  act(() => {
+    vi.advanceTimersByTime(1)
+  })
+  expect(getTestWebSockets().length).toBe(2)
+
+  // Close socket2 before its open event fires. The attempt counter is still 1
+  // (not reset by open), so the next delay = 1 * 1000 * 2^1 = 2000ms.
+  const socket2 = getTestWebSockets()[1]
+  if (!socket2) throw new Error('expected a second socket')
+  act(() => {
+    socket2.dispatchEvent(new Event('close'))
+  })
+
+  await act(async () => {
+    await vi.advanceTimersByTimeAsync(1999)
+  })
+  expect(getTestWebSockets().length).toBe(2)
+
+  await act(async () => {
+    await vi.advanceTimersByTimeAsync(1)
+  })
+  expect(getTestWebSockets().length).toBe(3)
+
+  vi.useRealTimers()
+})
+
+test('does not reconnect on intentional unmount', async () => {
+  vi.useFakeTimers()
+  vi.spyOn(env, 'isDev').mockReturnValue(false)
+  const queryClient = makeQueryClient()
+
+  const { unmount } = renderHook(() => useWebSocket('slug1'), {
+    wrapper: makeWrapper(queryClient),
+  })
+
+  await vi.advanceTimersByTimeAsync(0)
+  unmount()
+
+  await vi.advanceTimersByTimeAsync(60_000)
+  expect(getTestWebSockets().length).toBe(1)
+
+  vi.useRealTimers()
+})
+
+test('resets backoff delay after a successful reconnect', async () => {
+  vi.useFakeTimers()
+  vi.spyOn(env, 'isDev').mockReturnValue(false)
+  vi.spyOn(Math, 'random').mockReturnValue(1)
+  const queryClient = makeQueryClient()
+
+  renderHook(() => useWebSocket('slug1'), {
+    wrapper: makeWrapper(queryClient),
+  })
+
+  await vi.advanceTimersByTimeAsync(0)
+
+  // First disconnect: attempt 0, delay = 1000ms
+  const socket1 = getTestWebSockets()[0]
+  if (!socket1) throw new Error('expected a socket')
+  await act(async () => {
+    socket1.dispatchEvent(new Event('close'))
+  })
+
+  await vi.advanceTimersByTimeAsync(1000)
+  expect(getTestWebSockets().length).toBe(2)
+  await vi.advanceTimersByTimeAsync(0) // open fires, resets attempt to 0
+
+  // Second disconnect after successful reconnect: attempt should be 0 again, delay = 1000ms
+  const socket2 = getTestWebSockets()[1]
+  if (!socket2) throw new Error('expected a second socket')
+  await act(async () => {
+    socket2.dispatchEvent(new Event('close'))
+  })
+
+  // If attempt was NOT reset, delay would be 2000ms. At 1000ms we should see reconnect.
+  await vi.advanceTimersByTimeAsync(1000)
+  expect(getTestWebSockets().length).toBe(3)
+
+  vi.useRealTimers()
 })
