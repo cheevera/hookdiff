@@ -147,7 +147,7 @@ The devcontainer references the same `docker-compose.yml` used for local develop
 - Installs all Node dependencies via `pnpm install` automatically on container creation
 - Runs database migrations on first start
 - Forwards all relevant ports (Django on 8000, React dev server on 5173, PostgreSQL on 5432)
-- Installs recommended VS Code extensions: Python, Pylance, ESLint, Prettier, Tailwind CSS IntelliSense, Docker
+- Installs recommended VS Code extensions: Biome, Tailwind CSS IntelliSense, Docker, Ruff
 - Configures VS Code launch configs for simultaneous Django and React debugging
 
 ### Services (docker-compose)
