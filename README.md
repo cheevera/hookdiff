@@ -1,6 +1,6 @@
 # hookdiff
 
-> **Work in progress.** The v1 feature set is functional (request capture, real-time streaming, JSON diff view). Not yet deployed or hardened for public use.
+[![CI](https://github.com/cheevera/hookdiff/actions/workflows/ci.yml/badge.svg)](https://github.com/cheevera/hookdiff/actions/workflows/ci.yml)
 
 A local developer tool for capturing, inspecting, and diffing incoming webhook requests. Inspired by webhook.site, with a core differentiator: structured JSON diff and field-level value tracking across multiple captured requests.
 
