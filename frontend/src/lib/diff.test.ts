@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest'
-import { diff } from './diff'
+import { diff } from '@/lib/diff'
 
 describe('diff', () => {
   test('changed scalar', () => {

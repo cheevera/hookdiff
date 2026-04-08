@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router'
-import { useCreateEndpoint } from '../hooks/useCreateEndpoint'
-import { readStoredSlug } from '../lib/endpoint'
+import { useCreateEndpoint } from '@/hooks/useCreateEndpoint'
+import { readStoredSlug } from '@/lib/endpoint'
 
 export function EndpointBootstrap() {
   const navigate = useNavigate()

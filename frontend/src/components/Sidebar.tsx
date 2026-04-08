@@ -1,5 +1,5 @@
-import type { WebhookRequest } from '../types/request'
-import { MethodBadge } from './MethodBadge'
+import { MethodBadge } from '@/components/MethodBadge'
+import type { WebhookRequest } from '@/types/request'
 
 const PREVIEW_MAX_LEN = 80
 

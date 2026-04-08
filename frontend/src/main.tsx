@@ -3,9 +3,9 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router'
 import { Toaster } from 'sonner'
-import { App } from './App'
-import { useTheme } from './hooks/useTheme'
-import './index.css'
+import { App } from '@/App'
+import { useTheme } from '@/hooks/useTheme'
+import '@/index.css'
 
 const queryClient = new QueryClient()
 

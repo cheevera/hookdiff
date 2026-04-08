@@ -2,10 +2,10 @@ import { screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { HttpResponse, http } from 'msw'
 import { afterEach, beforeEach, expect, test, vi } from 'vitest'
-import { App } from '../App'
-import { ENDPOINT_STORAGE_KEY } from '../lib/endpoint'
-import { server } from '../mocks/server'
-import { renderWithProviders } from '../test/utils'
+import { App } from '@/App'
+import { ENDPOINT_STORAGE_KEY } from '@/lib/endpoint'
+import { server } from '@/mocks/server'
+import { renderWithProviders } from '@/test/utils'
 
 beforeEach(() => {
   localStorage.clear()

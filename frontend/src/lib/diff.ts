@@ -1,4 +1,4 @@
-import { isPlainObject } from './object'
+import { isPlainObject } from '@/lib/object'
 
 export type DiffType = 'changed' | 'added' | 'removed'
 

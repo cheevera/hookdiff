@@ -1,5 +1,5 @@
 import { type HttpHandler, HttpResponse, http } from 'msw'
-import { MOCK_REQUESTS } from './fixtures'
+import { MOCK_REQUESTS } from '@/mocks/fixtures'
 
 export function generateSlug(): string {
   return crypto.randomUUID().replace(/-/g, '').slice(0, 8)

@@ -1,8 +1,8 @@
-import { useTheme } from '../hooks/useTheme'
-import { type DiffEntry, diff } from '../lib/diff'
-import { isPlainObject } from '../lib/object'
-import type { WebhookRequest } from '../types/request'
-import { JsonCode } from './JsonCode'
+import { JsonCode } from '@/components/JsonCode'
+import { useTheme } from '@/hooks/useTheme'
+import { type DiffEntry, diff } from '@/lib/diff'
+import { isPlainObject } from '@/lib/object'
+import type { WebhookRequest } from '@/types/request'
 
 function formatValue(value: unknown): string {
   return JSON.stringify(value)

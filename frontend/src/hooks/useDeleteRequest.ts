@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
-import { deleteRequest } from '../lib/api'
-import type { WebhookRequest } from '../types/request'
+import { deleteRequest } from '@/lib/api'
+import type { WebhookRequest } from '@/types/request'
 
 export function useDeleteRequest(slug: string | undefined) {
   const queryClient = useQueryClient()

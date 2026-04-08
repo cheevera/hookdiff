@@ -1,9 +1,9 @@
 import { waitFor } from '@testing-library/react'
 import { HttpResponse, http } from 'msw'
 import { expect, test } from 'vitest'
-import { server } from '../mocks/server'
-import { renderWithProviders } from '../test/utils'
-import { useSendTestRequest } from './useSendTestRequest'
+import { useSendTestRequest } from '@/hooks/useSendTestRequest'
+import { server } from '@/mocks/server'
+import { renderWithProviders } from '@/test/utils'
 
 function TestHarness({ slug }: { slug: string }) {
   const mutation = useSendTestRequest(slug)

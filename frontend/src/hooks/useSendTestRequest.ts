@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query'
 import { toast } from 'sonner'
-import { sendTestRequest } from '../lib/api'
+import { sendTestRequest } from '@/lib/api'
 
 export function useSendTestRequest(slug: string | undefined) {
   return useMutation({

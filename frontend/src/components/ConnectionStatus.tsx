@@ -1,4 +1,4 @@
-import * as env from '../lib/env'
+import * as env from '@/lib/env'
 
 type Props = { status: 'connecting' | 'open' | 'closed' }
 

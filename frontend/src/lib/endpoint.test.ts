@@ -1,5 +1,10 @@
 import { afterEach, beforeEach, expect, test, vi } from 'vitest'
-import { clearStoredSlug, ENDPOINT_STORAGE_KEY, readStoredSlug, writeStoredSlug } from './endpoint'
+import {
+  clearStoredSlug,
+  ENDPOINT_STORAGE_KEY,
+  readStoredSlug,
+  writeStoredSlug,
+} from '@/lib/endpoint'
 
 beforeEach(() => {
   localStorage.clear()

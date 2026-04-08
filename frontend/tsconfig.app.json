@@ -10,6 +10,7 @@
     "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": true,
     "moduleDetection": "force",
+    "composite": true,
     "noEmit": true,
     "jsx": "react-jsx",
 
@@ -19,6 +20,9 @@
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
+
+    "baseUrl": ".",
+    "paths": { "@/*": ["./src/*"] },
 
     "types": ["vitest/globals", "@testing-library/jest-dom/vitest"]
   },

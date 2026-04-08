@@ -1,14 +1,14 @@
 import { HttpResponse, http } from 'msw'
 import { expect, test } from 'vitest'
-import { server } from '../mocks/server'
-import type { WebhookRequest } from '../types/request'
 import {
   createEndpoint,
   deleteAllRequests,
   deleteRequest,
   fetchRequests,
   sendTestRequest,
-} from './api'
+} from '@/lib/api'
+import { server } from '@/mocks/server'
+import type { WebhookRequest } from '@/types/request'
 
 test('createEndpoint returns the parsed endpoint on success', async () => {
   server.use(

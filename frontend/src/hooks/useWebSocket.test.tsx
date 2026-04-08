@@ -2,10 +2,10 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { act, renderHook, waitFor } from '@testing-library/react'
 import type { ReactNode } from 'react'
 import { afterEach, expect, test, vi } from 'vitest'
-import * as env from '../lib/env'
-import { getTestWebSockets, TestWebSocket } from '../test/webSocketMock'
-import type { WebhookRequest } from '../types/request'
-import { useWebSocket } from './useWebSocket'
+import { useWebSocket } from '@/hooks/useWebSocket'
+import * as env from '@/lib/env'
+import { getTestWebSockets, TestWebSocket } from '@/test/webSocketMock'
+import type { WebhookRequest } from '@/types/request'
 
 afterEach(() => {
   vi.restoreAllMocks()

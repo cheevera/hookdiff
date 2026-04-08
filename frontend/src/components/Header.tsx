@@ -1,5 +1,5 @@
-import { CopyButton } from './CopyButton'
-import { ThemeToggle } from './ThemeToggle'
+import { CopyButton } from '@/components/CopyButton'
+import { ThemeToggle } from '@/components/ThemeToggle'
 
 type HeaderProps = {
   url: string

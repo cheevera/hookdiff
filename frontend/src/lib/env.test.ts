@@ -1,5 +1,5 @@
 import { afterEach, expect, test, vi } from 'vitest'
-import { getWebhookUrl, getWebSocketUrl, isDev } from './env'
+import { getWebhookUrl, getWebSocketUrl, isDev } from '@/lib/env'
 
 afterEach(() => {
   vi.unstubAllGlobals()

@@ -1,8 +1,8 @@
 import { screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, expect, test, vi } from 'vitest'
-import { renderWithProviders } from '../test/utils'
-import { CopyButton } from './CopyButton'
+import { CopyButton } from '@/components/CopyButton'
+import { renderWithProviders } from '@/test/utils'
 
 afterEach(() => {
   vi.restoreAllMocks()

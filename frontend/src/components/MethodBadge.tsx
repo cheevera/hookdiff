@@ -1,4 +1,4 @@
-import type { HttpMethod } from '../types/request'
+import type { HttpMethod } from '@/types/request'
 
 const METHOD_CLASSES: Record<HttpMethod, string> = {
   GET: 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300',

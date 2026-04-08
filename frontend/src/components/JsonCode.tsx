@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import type { Theme } from '../hooks/useTheme'
-import { getHighlighter } from '../lib/shiki'
+import type { Theme } from '@/hooks/useTheme'
+import { getHighlighter } from '@/lib/shiki'
 
 export function JsonCode({ value, theme }: { value: unknown; theme: Theme }) {
   const [html, setHtml] = useState<string | null>(null)

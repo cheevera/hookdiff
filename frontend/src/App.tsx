@@ -1,7 +1,7 @@
 import { Route, Routes } from 'react-router'
-import { EndpointBootstrap } from './components/EndpointBootstrap'
-import { EndpointView } from './components/EndpointView'
-import { ErrorBoundary } from './components/ErrorBoundary'
+import { EndpointBootstrap } from '@/components/EndpointBootstrap'
+import { EndpointView } from '@/components/EndpointView'
+import { ErrorBoundary } from '@/components/ErrorBoundary'
 
 export function App() {
   return (

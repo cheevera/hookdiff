@@ -1,8 +1,8 @@
 import { screen, waitFor } from '@testing-library/react'
 import { expect, test } from 'vitest'
-import { renderWithProviders } from '../test/utils'
-import type { WebhookRequest } from '../types/request'
-import { DiffView } from './DiffView'
+import { DiffView } from '@/components/DiffView'
+import { renderWithProviders } from '@/test/utils'
+import type { WebhookRequest } from '@/types/request'
 
 const PREVIOUS: WebhookRequest = {
   id: 'prev_01',

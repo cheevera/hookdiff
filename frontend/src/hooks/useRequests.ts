@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { fetchRequests } from '../lib/api'
+import { fetchRequests } from '@/lib/api'
 
 export function useRequests(slug: string | undefined) {
   return useQuery({

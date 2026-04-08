@@ -1,7 +1,7 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { useEffect, useRef, useState } from 'react'
-import { getWebSocketUrl } from '../lib/env'
-import type { WebhookRequest } from '../types/request'
+import { getWebSocketUrl } from '@/lib/env'
+import type { WebhookRequest } from '@/types/request'
 
 type WebSocketStatus = 'connecting' | 'open' | 'closed'
 

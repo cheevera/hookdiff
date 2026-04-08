@@ -1,9 +1,9 @@
 import { screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { expect, test, vi } from 'vitest'
-import { renderWithProviders } from '../test/utils'
-import type { WebhookRequest } from '../types/request'
-import { Sidebar } from './Sidebar'
+import { Sidebar } from '@/components/Sidebar'
+import { renderWithProviders } from '@/test/utils'
+import type { WebhookRequest } from '@/types/request'
 
 const sampleRequests: WebhookRequest[] = [
   {

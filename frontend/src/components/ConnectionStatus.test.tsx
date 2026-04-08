@@ -1,7 +1,7 @@
 import { render } from '@testing-library/react'
 import { afterEach, expect, test, vi } from 'vitest'
-import * as env from '../lib/env'
-import { ConnectionStatus } from './ConnectionStatus'
+import { ConnectionStatus } from '@/components/ConnectionStatus'
+import * as env from '@/lib/env'
 
 afterEach(() => {
   vi.restoreAllMocks()

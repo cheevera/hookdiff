@@ -1,8 +1,8 @@
 import { waitFor } from '@testing-library/react'
 import { afterEach, expect, test, vi } from 'vitest'
-import * as shikiLib from '../lib/shiki'
-import { renderWithProviders } from '../test/utils'
-import { JsonCode } from './JsonCode'
+import { JsonCode } from '@/components/JsonCode'
+import * as shikiLib from '@/lib/shiki'
+import { renderWithProviders } from '@/test/utils'
 
 afterEach(() => {
   vi.restoreAllMocks()

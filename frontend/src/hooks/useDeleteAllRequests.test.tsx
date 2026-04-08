@@ -4,9 +4,9 @@ import { HttpResponse, http } from 'msw'
 import type { ReactNode } from 'react'
 import { toast } from 'sonner'
 import { expect, test, vi } from 'vitest'
-import { server } from '../mocks/server'
-import type { WebhookRequest } from '../types/request'
-import { useDeleteAllRequests } from './useDeleteAllRequests'
+import { useDeleteAllRequests } from '@/hooks/useDeleteAllRequests'
+import { server } from '@/mocks/server'
+import type { WebhookRequest } from '@/types/request'
 
 function makeQueryClient(): QueryClient {
   return new QueryClient({ defaultOptions: { queries: { retry: false } } })

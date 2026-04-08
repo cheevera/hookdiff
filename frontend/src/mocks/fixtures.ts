@@ -1,4 +1,4 @@
-import type { WebhookRequest } from '../types/request'
+import type { WebhookRequest } from '@/types/request'
 
 export const MOCK_REQUESTS: WebhookRequest[] = [
   {

@@ -1,9 +1,9 @@
 import { screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { expect, test } from 'vitest'
-import { renderWithProviders } from '../test/utils'
-import type { WebhookRequest } from '../types/request'
-import { DetailPanel } from './DetailPanel'
+import { DetailPanel } from '@/components/DetailPanel'
+import { renderWithProviders } from '@/test/utils'
+import type { WebhookRequest } from '@/types/request'
 
 const BASE_REQUEST: WebhookRequest = {
   id: 'req_show',

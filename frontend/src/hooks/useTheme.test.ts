@@ -1,6 +1,6 @@
 import { act, renderHook } from '@testing-library/react'
 import { afterEach, beforeEach, expect, test, vi } from 'vitest'
-import { useTheme } from './useTheme'
+import { useTheme } from '@/hooks/useTheme'
 
 beforeEach(() => {
   document.documentElement.classList.remove('dark')

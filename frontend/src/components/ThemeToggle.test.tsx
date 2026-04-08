@@ -1,8 +1,8 @@
 import { screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, beforeEach, expect, test } from 'vitest'
-import { renderWithProviders } from '../test/utils'
-import { ThemeToggle } from './ThemeToggle'
+import { ThemeToggle } from '@/components/ThemeToggle'
+import { renderWithProviders } from '@/test/utils'
 
 beforeEach(() => {
   document.documentElement.classList.remove('dark')

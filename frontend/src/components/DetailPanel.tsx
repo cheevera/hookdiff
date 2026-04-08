@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import { useTheme } from '../hooks/useTheme'
-import type { WebhookRequest } from '../types/request'
-import { DiffView } from './DiffView'
-import { JsonCode } from './JsonCode'
-import { MethodBadge } from './MethodBadge'
+import { DiffView } from '@/components/DiffView'
+import { JsonCode } from '@/components/JsonCode'
+import { MethodBadge } from '@/components/MethodBadge'
+import { useTheme } from '@/hooks/useTheme'
+import type { WebhookRequest } from '@/types/request'
 
 function KeyValueList({ entries }: { entries: Record<string, string> }) {
   return (

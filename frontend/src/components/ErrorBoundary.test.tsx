@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { expect, test, vi } from 'vitest'
-import { ErrorBoundary } from './ErrorBoundary'
+import { ErrorBoundary } from '@/components/ErrorBoundary'
 
 function ThrowingChild(): never {
   throw new Error('test error')
