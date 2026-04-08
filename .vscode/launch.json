@@ -5,9 +5,8 @@
       "name": "Django",
       "type": "debugpy",
       "request": "launch",
-      "program": "${workspaceFolder}/backend/manage.py",
-      "args": ["runserver", "0.0.0.0:8000", "--noreload"],
-      "django": true,
+      "module": "uvicorn",
+      "args": ["hookdiff.asgi:application", "--host", "0.0.0.0", "--port", "8000"],
       "cwd": "${workspaceFolder}/backend",
       "env": {
         "DJANGO_DEBUG": "1"
