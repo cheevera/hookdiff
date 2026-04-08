@@ -88,10 +88,11 @@ def test_rejects_non_json_content_type(client, endpoint):
 
 @pytest.mark.django_db
 def test_rejects_missing_content_type(client, endpoint):
-    response = client.post(
+    response = client.generic(
+        "POST",
         f"/hooks/{endpoint.slug}/",
-        data="not json",
-        content_type="text/plain",
+        data=b"{}",
+        content_type="",
     )
     assert response.status_code == 400
     assert WebhookRequest.objects.count() == 0
