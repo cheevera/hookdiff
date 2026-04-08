@@ -23,13 +23,7 @@ function formatTime(iso: string): string {
 }
 
 function latestReceivedAt(requests: WebhookRequest[]): string {
-  let latest = requests[0].receivedAt
-  for (const r of requests) {
-    if (new Date(r.receivedAt).getTime() > new Date(latest).getTime()) {
-      latest = r.receivedAt
-    }
-  }
-  return latest
+  return requests[0].receivedAt
 }
 
 type SidebarItemProps = {
