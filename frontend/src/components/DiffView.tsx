@@ -1,11 +1,8 @@
 import { useTheme } from '../hooks/useTheme'
 import { type DiffEntry, diff } from '../lib/diff'
+import { isPlainObject } from '../lib/object'
 import type { WebhookRequest } from '../types/request'
 import { JsonCode } from './JsonCode'
-
-function isPlainObject(val: unknown): val is Record<string, unknown> {
-  return val !== null && typeof val === 'object' && !Array.isArray(val)
-}
 
 function formatValue(value: unknown): string {
   return JSON.stringify(value)

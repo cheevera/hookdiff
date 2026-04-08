@@ -1,3 +1,5 @@
+import { isPlainObject } from './object'
+
 export type DiffType = 'changed' | 'added' | 'removed'
 
 export type DiffEntry = {
@@ -5,10 +7,6 @@ export type DiffEntry = {
   type: DiffType
   oldValue: unknown
   newValue: unknown
-}
-
-function isPlainObject(val: unknown): val is Record<string, unknown> {
-  return val !== null && typeof val === 'object' && !Array.isArray(val)
 }
 
 export function diff(a: Record<string, unknown>, b: Record<string, unknown>): DiffEntry[] {
