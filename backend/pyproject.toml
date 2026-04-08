@@ -19,6 +19,9 @@ dev = [
     "pytest-django>=4.9",
     "pytest-cov>=6.0",
     "ruff>=0.8",
+    "mypy>=1.13",
+    "django-stubs>=5.1",
+    "djangorestframework-stubs>=3.15",
     "debugpy>=1.8",
     "daphne>=4.1",
 ]
@@ -41,6 +44,20 @@ omit = [
 
 [tool.coverage.report]
 fail_under = 100
+
+[tool.mypy]
+python_version = "3.12"
+plugins = ["mypy_django_plugin.main", "mypy_drf_plugin.main"]
+strict = true
+warn_unreachable = true
+exclude = ["migrations/", "manage.py", ".*/tests/.*"]
+
+[[tool.mypy.overrides]]
+module = ["channels.*", "asgiref.*"]
+ignore_missing_imports = true
+
+[tool.django-stubs]
+django_settings_module = "hookdiff.settings"
 
 [tool.ruff]
 target-version = "py312"

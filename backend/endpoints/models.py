@@ -8,7 +8,7 @@ class Endpoint(models.Model):
     slug = models.CharField(max_length=32, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.slug
 
 
@@ -29,5 +29,5 @@ class WebhookRequest(models.Model):
         ]
         ordering = ["-received_at"]
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.method} {self.endpoint.slug} @ {self.received_at}"

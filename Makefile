@@ -72,7 +72,7 @@ coverage-back:
 	cd backend && uv run pytest --cov --cov-report=term-missing --cov-fail-under=100
 
 check-back:
-	cd backend && uv run ruff check . && uv run ruff format --check .
+	cd backend && uv run ruff check . && uv run ruff format --check . && uv run mypy .
 
 format-back:
 	cd backend && uv run ruff check --fix . && uv run ruff format .

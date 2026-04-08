@@ -19,7 +19,7 @@ INSTALLED_APPS = [
     "endpoints",
 ]
 
-REST_FRAMEWORK = {
+REST_FRAMEWORK: dict[str, object] = {
     "DEFAULT_AUTHENTICATION_CLASSES": [],
     "DEFAULT_PERMISSION_CLASSES": [],
     "UNAUTHENTICATED_USER": None,

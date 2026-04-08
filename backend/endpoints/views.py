@@ -1,14 +1,16 @@
 import json
 import secrets
+from typing import Any
 
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
-from django.db import IntegrityError, transaction
-from django.http import JsonResponse
+from django.db import IntegrityError, models, transaction
+from django.http import HttpRequest, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from rest_framework import generics, status
+from rest_framework.request import Request
 from rest_framework.response import Response
 
 from endpoints.models import Endpoint, WebhookRequest
@@ -27,11 +29,11 @@ STRIPPED_HEADERS = {
 STRIPPED_PREFIXES = ("x-amzn-", "cf-")
 
 
-def generate_slug():
+def generate_slug() -> str:
     return secrets.token_urlsafe(6)
 
 
-def filter_headers(headers):
+def filter_headers(headers: dict[str, str]) -> dict[str, str]:
     return {
         key: value
         for key, value in headers.items()
@@ -40,10 +42,10 @@ def filter_headers(headers):
     }
 
 
-class EndpointCreate(generics.CreateAPIView):
+class EndpointCreate(generics.CreateAPIView[Endpoint]):
     serializer_class = EndpointSerializer
 
-    def create(self, request, *args, **kwargs):
+    def create(self, request: Request, *args: Any, **kwargs: Any) -> Response:
         for _ in range(MAX_SLUG_RETRIES):
             slug = generate_slug()
             try:
@@ -59,24 +61,24 @@ class EndpointCreate(generics.CreateAPIView):
         )
 
 
-class RequestList(generics.ListAPIView):
+class RequestList(generics.ListAPIView[WebhookRequest]):
     serializer_class = WebhookRequestSerializer
 
-    def get_queryset(self):
+    def get_queryset(self) -> models.QuerySet[WebhookRequest]:
         endpoint = get_object_or_404(Endpoint, slug=self.kwargs["slug"])
         return endpoint.requests.all()
 
-    def delete(self, request, *args, **kwargs):
+    def delete(self, request: Request, *args: Any, **kwargs: Any) -> Response:
         queryset = self.get_queryset()
         queryset.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class RequestDetail(generics.RetrieveDestroyAPIView):
+class RequestDetail(generics.RetrieveDestroyAPIView[WebhookRequest]):
     serializer_class = WebhookRequestSerializer
     lookup_url_kwarg = "request_id"
 
-    def get_queryset(self):
+    def get_queryset(self) -> models.QuerySet[WebhookRequest]:
         return WebhookRequest.objects.filter(endpoint__slug=self.kwargs["slug"])
 
 
@@ -84,7 +86,7 @@ class RequestDetail(generics.RetrieveDestroyAPIView):
 # the endpoint is intentionally unprotected.
 @csrf_exempt
 @require_http_methods(["GET", "POST", "PUT", "PATCH", "DELETE"])
-def receive_webhook(request, slug):
+def receive_webhook(request: HttpRequest, slug: str) -> JsonResponse:
     endpoint = get_object_or_404(Endpoint, slug=slug)
 
     if len(request.body) > MAX_BODY_BYTES:
@@ -108,6 +110,8 @@ def receive_webhook(request, slug):
     raw_headers = {key: value for key, value in request.headers.items()}
     filtered_headers = filter_headers(raw_headers)
 
+    # request.method is guaranteed non-None by @require_http_methods
+    assert request.method is not None
     webhook_request = WebhookRequest.objects.create(
         endpoint=endpoint,
         method=request.method,
