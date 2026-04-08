@@ -2,7 +2,13 @@ import { HttpResponse, http } from 'msw'
 import { expect, test } from 'vitest'
 import { server } from '../mocks/server'
 import type { WebhookRequest } from '../types/request'
-import { createEndpoint, fetchRequests, sendTestRequest } from './api'
+import {
+  createEndpoint,
+  deleteAllRequests,
+  deleteRequest,
+  fetchRequests,
+  sendTestRequest,
+} from './api'
 
 test('createEndpoint returns the parsed endpoint on success', async () => {
   server.use(
@@ -56,4 +62,38 @@ test('sendTestRequest posts to the webhook endpoint', async () => {
 test('sendTestRequest throws when the response is not ok', async () => {
   server.use(http.post('/hooks/:slug/', () => new HttpResponse(null, { status: 500 })))
   await expect(sendTestRequest('badslug1')).rejects.toThrow(/Failed to send test request: 500/)
+})
+
+test('deleteRequest resolves on 204', async () => {
+  server.use(
+    http.delete(
+      '/api/endpoints/:slug/requests/:id/',
+      () => new HttpResponse(null, { status: 204 }),
+    ),
+  )
+  await expect(deleteRequest('okslug01', 'req_01')).resolves.toBeUndefined()
+})
+
+test('deleteRequest throws when the response is not ok', async () => {
+  server.use(
+    http.delete(
+      '/api/endpoints/:slug/requests/:id/',
+      () => new HttpResponse(null, { status: 500 }),
+    ),
+  )
+  await expect(deleteRequest('badslug1', 'req_01')).rejects.toThrow(/Failed to delete request: 500/)
+})
+
+test('deleteAllRequests resolves on 204', async () => {
+  server.use(
+    http.delete('/api/endpoints/:slug/requests/', () => new HttpResponse(null, { status: 204 })),
+  )
+  await expect(deleteAllRequests('okslug01')).resolves.toBeUndefined()
+})
+
+test('deleteAllRequests throws when the response is not ok', async () => {
+  server.use(
+    http.delete('/api/endpoints/:slug/requests/', () => new HttpResponse(null, { status: 500 })),
+  )
+  await expect(deleteAllRequests('badslug1')).rejects.toThrow(/Failed to delete requests: 500/)
 })
