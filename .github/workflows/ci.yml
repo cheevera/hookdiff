@@ -17,12 +17,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - uses: pnpm/action-setup@v4
+        with:
+          package_json_file: frontend/package.json
+
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-
-      - name: Enable corepack
-        run: corepack enable
+          cache: pnpm
+          cache-dependency-path: frontend/pnpm-lock.yaml
 
       - name: Install frontend dependencies
         run: pnpm --dir frontend install --frozen-lockfile
@@ -72,6 +75,8 @@ jobs:
       - uses: astral-sh/setup-uv@v4
         with:
           version: "latest"
+          enable-cache: true
+          cache-dependency-glob: backend/uv.lock
 
       - name: Install backend dependencies
         run: cd backend && uv sync
