@@ -1,6 +1,8 @@
 # hookdiff
 
 [![CI](https://github.com/cheevera/hookdiff/actions/workflows/ci.yml/badge.svg)](https://github.com/cheevera/hookdiff/actions/workflows/ci.yml)
+[![coverage: 100%](https://img.shields.io/badge/coverage-100%25-brightgreen)](https://github.com/cheevera/hookdiff)
+[![license: MIT](https://img.shields.io/badge/license-MIT-blue)](https://github.com/cheevera/hookdiff/blob/main/LICENSE)
 
 A local developer tool for capturing, inspecting, and diffing incoming webhook requests. Inspired by webhook.site, with a core differentiator: structured JSON diff and field-level value tracking across multiple captured requests.
 
