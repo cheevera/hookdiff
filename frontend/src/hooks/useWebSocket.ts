@@ -25,13 +25,14 @@ export function useWebSocket(slug: string | undefined) {
 
   useEffect(() => {
     if (!slug) return
+    const currentSlug = slug
 
     let intentionalClose = false
     let reconnectTimer: ReturnType<typeof setTimeout> | undefined
     let socket: WebSocket
 
     function connect() {
-      socket = new WebSocket(getWebSocketUrl(slug!))
+      socket = new WebSocket(getWebSocketUrl(currentSlug))
 
       const handleOpen = () => {
         attemptRef.current = 0
@@ -55,7 +56,7 @@ export function useWebSocket(slug: string | undefined) {
           return
         }
         if (payload.type !== 'request.received') return
-        queryClient.setQueryData<WebhookRequest[]>(['requests', slug], (old) => [
+        queryClient.setQueryData<WebhookRequest[]>(['requests', currentSlug], (old) => [
           payload.request,
           ...(old ?? []),
         ])
