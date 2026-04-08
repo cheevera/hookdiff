@@ -31,7 +31,7 @@ export function useWebSocket(slug: string | undefined) {
     let socket: WebSocket
 
     function connect() {
-      socket = new WebSocket(getWebSocketUrl(slug))
+      socket = new WebSocket(getWebSocketUrl(slug!))
 
       const handleOpen = () => {
         attemptRef.current = 0
