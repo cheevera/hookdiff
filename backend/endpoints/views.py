@@ -80,8 +80,10 @@ class RequestDetail(generics.RetrieveDestroyAPIView):
         return WebhookRequest.objects.filter(endpoint__slug=self.kwargs["slug"])
 
 
+# Explicit: CsrfViewMiddleware is not enabled, but this documents that
+# the endpoint is intentionally unprotected.
 @csrf_exempt
-@require_http_methods(["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"])
+@require_http_methods(["GET", "POST", "PUT", "PATCH", "DELETE"])
 def receive_webhook(request, slug):
     endpoint = get_object_or_404(Endpoint, slug=slug)
 
